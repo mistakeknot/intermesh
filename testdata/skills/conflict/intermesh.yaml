@@ -1,0 +1,9 @@
+version: 1
+id: fixture:conflict
+triggers:
+  phrases: ["conflicting fixture"]
+conflicts_with: ["fixture:depends"]
+requires: []
+composes_with: []
+supersedes: []
+

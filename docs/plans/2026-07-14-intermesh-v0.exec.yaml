@@ -1,0 +1,54 @@
+version: 1
+mode: all-sequential
+tier: deep
+max_parallel: 1
+timeout_per_task: 900
+
+stages:
+  - name: "Contracts and core"
+    tasks:
+      - id: task-1
+        title: "Freeze registry and route contracts"
+        files: [docs/contracts/registry-v1.md, testdata/skills]
+        depends: []
+      - id: task-2
+        title: "Discover and parse skills"
+        files: [go.mod, internal/skill]
+        depends: [task-1]
+      - id: task-3
+        title: "Build atomic SQLite registry"
+        files: [internal/registry]
+        depends: [task-2]
+      - id: task-4
+        title: "Rank candidates and emit receipts"
+        files: [internal/route, internal/receipt, testdata/routes]
+        depends: [task-3]
+      - id: task-5
+        title: "Resolve skill graph"
+        files: [internal/manifest, internal/graph]
+        depends: [task-3]
+      - id: task-6
+        title: "Wire CLI and diagnostics"
+        files: [cmd/intermesh, internal/cli]
+        depends: [task-4, task-5]
+  - name: "Host and ecosystem integration"
+    tasks:
+      - id: task-7
+        title: "Add safe profiles and host adapters"
+        files: [internal/profile, adapters, skills/router, .claude-plugin/plugin.json]
+        depends: [task-6]
+      - id: task-8
+        title: "Integrate Interskill and Interspect"
+        files: [docs/contracts/interskill-integration.md, docs/contracts/interspect-receipts-v1.md]
+        depends: [task-6]
+  - name: "Evidence and landing"
+    tasks:
+      - id: task-9
+        title: "Run routing and context experiment"
+        files: [scripts/experiment.sh, internal/eval, docs/reports/intermesh-v0-experiment.md]
+        depends: [task-7, task-8]
+      - id: task-10
+        title: "Verify, review, and land"
+        files: [README.md, AGENTS.md, CLAUDE.md, .github/workflows/ci.yml]
+        depends: [task-9]
+

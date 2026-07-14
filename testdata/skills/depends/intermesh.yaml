@@ -1,0 +1,11 @@
+version: 1
+id: fixture:depends
+triggers:
+  phrases: ["dependent fixture"]
+  extensions: [".fixture"]
+  environments: ["test"]
+requires: ["fixture:minimal"]
+composes_with: []
+conflicts_with: []
+supersedes: []
+

@@ -1,0 +1,12 @@
+/intermesh
+/bin/
+*.db
+*.db-shm
+*.db-wal
+*.out
+.DS_Store
+.idea/
+.vscode/
+.claude/
+.beads/
+
