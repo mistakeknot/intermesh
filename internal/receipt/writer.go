@@ -27,19 +27,29 @@ type Metadata struct {
 	Latency time.Duration
 }
 
+type Candidate struct {
+	ID         string             `json:"id"`
+	SkillMD    string             `json:"skill_md"`
+	Score      float64            `json:"score"`
+	Reasons    []string           `json:"reasons"`
+	Components map[string]float64 `json:"components,omitempty"`
+	SelectedBy string             `json:"selected_by"`
+	RequiredBy []string           `json:"required_by"`
+}
+
 type Record struct {
-	Event               string            `json:"event"`
-	RouteID             string            `json:"route_id"`
-	Timestamp           string            `json:"timestamp"`
-	QueryHash           string            `json:"query_hash"`
-	Query               string            `json:"query,omitempty"`
-	Host                string            `json:"host,omitempty"`
-	CWD                 string            `json:"cwd,omitempty"`
-	RegistryFingerprint string            `json:"registry_fingerprint,omitempty"`
-	Limit               int               `json:"limit"`
-	Candidates          []route.Candidate `json:"candidates"`
-	Warnings            []string          `json:"warnings"`
-	LatencyMicros       int64             `json:"latency_micros"`
+	Event               string      `json:"event"`
+	RouteID             string      `json:"route_id"`
+	Timestamp           string      `json:"timestamp"`
+	QueryHash           string      `json:"query_hash"`
+	Query               string      `json:"query,omitempty"`
+	Host                string      `json:"host,omitempty"`
+	CWD                 string      `json:"cwd,omitempty"`
+	RegistryFingerprint string      `json:"registry_fingerprint,omitempty"`
+	Limit               int         `json:"limit"`
+	Candidates          []Candidate `json:"candidates"`
+	Warnings            []string    `json:"warnings"`
+	LatencyMicros       int64       `json:"latency_micros"`
 }
 
 func (writer Writer) Append(ctx context.Context, result route.Result, metadata Metadata) error {
@@ -63,11 +73,19 @@ func (writer Writer) Append(ctx context.Context, result route.Result, metadata M
 	}
 	normalizedQuery := strings.Join(strings.Fields(strings.ToLower(result.Query)), " ")
 	hash := sha256.Sum256([]byte(normalizedQuery))
+	candidates := make([]Candidate, 0, len(result.Candidates))
+	for _, candidate := range result.Candidates {
+		candidates = append(candidates, Candidate{
+			ID: candidate.ID, SkillMD: candidate.SkillMD, Score: candidate.Score,
+			Reasons: candidate.Reasons, Components: candidate.Components,
+			SelectedBy: candidate.SelectedBy, RequiredBy: candidate.RequiredBy,
+		})
+	}
 	record := Record{
 		Event: "intermesh.route.v1", RouteID: identifier, Timestamp: now.Format(time.RFC3339Nano),
 		QueryHash: fmt.Sprintf("sha256:%x", hash), Host: result.Host, CWD: metadata.CWD,
 		RegistryFingerprint: result.RegistryFingerprint, Limit: metadata.Limit,
-		Candidates: result.Candidates, Warnings: result.Warnings, LatencyMicros: metadata.Latency.Microseconds(),
+		Candidates: candidates, Warnings: result.Warnings, LatencyMicros: metadata.Latency.Microseconds(),
 	}
 	if writer.IncludeQuery {
 		record.Query = result.Query

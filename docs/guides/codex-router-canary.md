@@ -142,6 +142,26 @@ non-system skills. This proves host isolation and context reduction, not routing
 quality. With zero observed canary sessions at measurement time, the activation
 verdict remained `hold`.
 
+## Progressive body-loading measurement
+
+Sessions c05 and c06 used the same prompt, registry, top-three ranking, and
+Codex canary profile. c05 followed the original adapter rule and fully loaded
+all three retrieved skill bodies. c06 received canonical candidate
+descriptions in route JSON, applied their trigger boundaries, and loaded one
+body:
+
+| Session | Retrieved | Fully loaded | Input tokens |
+|---|---:|---:|---:|
+| c05, load every candidate | 3 | 3 | 94,995 |
+| c06, applicability first | 3 | 1 | 69,748 |
+
+The identical-prompt input reduction was **26.6%**. Both task outcomes passed;
+both routing labels remained `partial`. c06 also showed that the original
+expected-skill label was ambiguous: the request asked for a command inventory
+while explicitly prohibiting verification, so the agent reasonably declined
+the verification workflow. Future canary cases must distinguish “identify a
+gate” from “perform the gated workflow” when assigning expected skills.
+
 ## Roll back
 
 The normal profile never changes, so the immediate rollback is simply to stop

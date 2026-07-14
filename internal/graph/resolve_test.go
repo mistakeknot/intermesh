@@ -1,6 +1,7 @@
 package graph
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
@@ -11,7 +12,7 @@ import (
 
 func graphSkill(id string, requires, conflicts []string) skill.Skill {
 	return skill.Skill{
-		ID: id, Name: id, SkillMD: "/skills/" + id + "/SKILL.md",
+		ID: id, Name: id, Description: "Description for " + id, SkillMD: "/skills/" + id + "/SKILL.md",
 		Manifest: skill.Manifest{ID: id, Requires: requires, ConflictsWith: conflicts},
 	}
 }
@@ -40,6 +41,22 @@ func TestResolveOrdersTransitiveRequirementsBeforeSelectedSkill(t *testing.T) {
 	}
 	if got.Candidates[1].SelectedBy != "requirement" || got.Candidates[1].RequiredBy[0] != "fixture:a" {
 		t.Fatalf("requirement provenance missing: %#v", got.Candidates[1])
+	}
+	payload, err := json.Marshal(got.Candidates[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(payload), `"description":"Description for fixture:c"`) {
+		t.Fatalf("required candidate description missing: %s", payload)
+	}
+	for _, candidate := range got.Candidates {
+		payload, err := json.Marshal(candidate)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !strings.Contains(string(payload), `"description":"Description for `+candidate.ID+`"`) {
+			t.Fatalf("candidate description was not hydrated: %s", payload)
+		}
 	}
 }
 

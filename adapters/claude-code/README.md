@@ -7,3 +7,7 @@ Claude's Agent Skills model preloads each available skill's name and description
 Installing this plugin does not suppress skills contributed by other installed plugins. In that common configuration Intermesh improves routing but cannot claim metadata-context reduction. A context-saving experiment needs an isolated Claude Code plugin/profile containing this router alone (plus explicitly chosen always-on skills).
 
 `intermesh profile` may manage a user-selected Claude skill catalog only when its removable entries are symlinks. It never edits Claude settings or uninstalls plugins.
+
+Route results include canonical candidate descriptions. The router uses those
+bounded metadata records to decide applicability, then reads complete skill
+bodies only for applicable candidates and their declared requirements.

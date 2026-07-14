@@ -1,8 +1,10 @@
 package route
 
 import (
+	"encoding/json"
 	"math"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/mistakeknot/intermesh/internal/registry"
@@ -37,6 +39,21 @@ func TestRankExactIDWins(t *testing.T) {
 	}
 	if math.Abs(componentTotal-result.Candidates[0].Score) > 1e-9 {
 		t.Fatalf("components do not sum to score: components=%#v score=%f", result.Candidates[0].Components, result.Candidates[0].Score)
+	}
+}
+
+func TestRankIncludesDescriptionForProgressiveSelection(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		routeFixture("intertest:verify", "verify", "Verify completed engineering work.", skill.Manifest{}),
+	}}
+
+	result := Rank(Request{Query: "verify engineering work", Limit: 1}, generation)
+	payload, err := json.Marshal(result.Candidates[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(payload), `"description":"Verify completed engineering work."`) {
+		t.Fatalf("candidate description missing from route JSON: %s", payload)
 	}
 }
 

@@ -7,3 +7,7 @@ Hermes indexes installed and external skill directories into its prompt, while l
 Create or select a dedicated profile that exposes only this router (and any intentional always-on skills). Do not configure the canonical Intermesh source roots as Hermes external skill directories: those directories would be indexed into the prompt and erase the metadata savings.
 
 The generic `intermesh profile` command is available for symlink-only catalogs, but Hermes's native profile controls are preferred. Intermesh does not edit Hermes configuration in V0.
+
+Route results include canonical candidate descriptions. The router first uses
+those bounded metadata records to judge applicability, then loads complete
+skill bodies only for applicable candidates and their declared requirements.

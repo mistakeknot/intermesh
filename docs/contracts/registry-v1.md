@@ -73,6 +73,7 @@ The fingerprint is `sha256:<hex>` over sorted normalized canonical records. It i
   "candidates": [
     {
       "id": "intertest:verification-before-completion",
+      "description": "Require fresh verification evidence before completion claims.",
       "skill_md": "/abs/path/SKILL.md",
       "score": 12.5,
       "reasons": ["phrase:verify", "lexical:completion"],
@@ -84,11 +85,15 @@ The fingerprint is `sha256:<hex>` over sorted normalized canonical records. It i
 }
 ```
 
-The result is bounded by the requested limit before requirements are expanded. Required candidates use `selected_by: "requirement"` and name their parent IDs under `required_by`.
+The result is bounded by the requested limit before requirements are expanded.
+`description` is the canonical SKILL.md frontmatter description and lets a host
+make a bounded applicability decision before loading any complete skill body.
+Required candidates use `selected_by: "requirement"` and name their parent IDs
+under `required_by`.
 
 ## Route receipt V1
 
-Receipts are append-only JSON Lines records with `event: "intermesh.route.v1"`, a unique route ID, UTC timestamp, query hash, cwd, host, registry fingerprint, requested limit, candidate IDs and score components, warnings, and latency in microseconds. Raw query text is absent by default.
+Receipts are append-only JSON Lines records with `event: "intermesh.route.v1"`, a unique route ID, UTC timestamp, query hash, cwd, host, registry fingerprint, requested limit, candidate IDs and score components, warnings, and latency in microseconds. Raw query text and candidate descriptions are absent by default.
 
 Intermesh records predictions only. Interspect or another evidence system attaches outcomes and publishes bounded calibration overlays through a separate versioned contract.
 

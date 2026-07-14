@@ -72,7 +72,15 @@ func Resolve(input route.Result, generation registry.Generation) (route.Result, 
 		candidate, exists := original[id]
 		if !exists {
 			item := byID[id]
-			candidate = route.Candidate{ID: id, SkillMD: item.SkillMD, SelectedBy: "requirement", Reasons: []string{}, RequiredBy: []string{}}
+			candidate = route.Candidate{ID: id, Description: item.Description, SkillMD: item.SkillMD, SelectedBy: "requirement", Reasons: []string{}, RequiredBy: []string{}}
+		} else {
+			item := byID[id]
+			if candidate.Description == "" {
+				candidate.Description = item.Description
+			}
+			if candidate.SkillMD == "" {
+				candidate.SkillMD = item.SkillMD
+			}
 		}
 		parents := requiredBy[id]
 		for parent := range parents {

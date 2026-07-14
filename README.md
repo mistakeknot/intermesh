@@ -81,7 +81,11 @@ Interskill optionally validates relationship manifests when this CLI is availabl
 - `adapters/claude-code/` — context-saving only in a router-only plugin/profile.
 - `adapters/hermes/` — context-saving through a dedicated native router-only profile.
 
-All adapters request three candidates by default, then load the returned `SKILL.md` files in dependency order. The source catalog remains outside the host's automatic discovery roots.
+All adapters request three candidates by default. Route JSON includes each
+candidate's canonical frontmatter description, so the host can apply trigger
+boundaries before loading complete bodies. Adapters fully load only applicable
+skills and their declared requirements, in dependency order. The source catalog
+remains outside the host's automatic discovery roots.
 
 ## Testing and optimization
 

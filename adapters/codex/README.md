@@ -17,3 +17,9 @@ entry is a symlink; regular directories make the plan `routing_only`.
 `intermesh-router`, and `profile restore --yes` reverses the operation.
 
 The context-saving claim applies only to the catalog actually managed by the profile. Skills exposed through another configured root or plugin remain visible to Codex.
+
+Route results include canonical candidate descriptions. The router treats the
+top three as bounded retrieval results, applies the descriptions' trigger and
+exclusion criteria, and loads complete `SKILL.md` bodies only for applicable
+candidates and their requirements. This second progressive-disclosure gate
+preserves top-three retrieval recall without paying every candidate-body cost.
