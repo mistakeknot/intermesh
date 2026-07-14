@@ -6,8 +6,10 @@ import (
 )
 
 var stopwords = map[string]struct{}{
-	"a": {}, "an": {}, "and": {}, "for": {}, "from": {}, "in": {}, "is": {}, "it": {},
-	"of": {}, "on": {}, "or": {}, "please": {}, "the": {}, "this": {}, "to": {}, "use": {}, "when": {}, "with": {},
+	"a": {}, "after": {}, "an": {}, "and": {}, "did": {}, "do": {}, "does": {}, "for": {}, "from": {},
+	"give": {}, "good": {}, "in": {}, "is": {}, "it": {}, "me": {}, "of": {}, "on": {}, "or": {},
+	"please": {}, "plus": {}, "should": {}, "than": {}, "the": {}, "this": {}, "to": {}, "use": {},
+	"what": {}, "when": {}, "with": {}, "you": {}, "your": {},
 }
 
 func normalizeText(value string) string {

@@ -2,6 +2,7 @@ package route
 
 import (
 	"math"
+	"reflect"
 	"testing"
 
 	"github.com/mistakeknot/intermesh/internal/registry"
@@ -81,6 +82,14 @@ func TestRankReturnsEmptyForNoLexicalMatch(t *testing.T) {
 
 	if len(result.Candidates) != 0 {
 		t.Fatalf("expected no candidates, got %#v", result.Candidates)
+	}
+}
+
+func TestTokensDropConversationalFunctionWords(t *testing.T) {
+	got := tokens("what should you give me after this than before no do did does your good plus weather forecast")
+	want := []string{"before", "no", "weather", "forecast"}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("tokens=%#v want %#v", got, want)
 	}
 }
 
