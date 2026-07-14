@@ -40,6 +40,27 @@ func TestRankExactIDWins(t *testing.T) {
 	}
 }
 
+func TestRankDoesNotTreatFileStemAsExactSkillName(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		routeFixture("intermux:agents", "agents", "Show a dashboard of agent sessions. Not for code quality.", skill.Manifest{}),
+		routeFixture("intertest:verification-before-completion", "verification-before-completion", "Use before completion to identify and run verification commands.", skill.Manifest{}),
+	}}
+
+	result := Rank(Request{
+		Query: "inspect AGENTS.md and identify the verification commands required before completion",
+		Limit: 3,
+	}, generation)
+
+	if len(result.Candidates) == 0 || result.Candidates[0].ID != "intertest:verification-before-completion" {
+		t.Fatalf("file stem received an exact-name bonus: %#v", result.Candidates)
+	}
+	for _, candidate := range result.Candidates {
+		if candidate.ID == "intermux:agents" && candidate.Components["exact_name"] != 0 {
+			t.Fatalf("AGENTS.md must not be an exact agents invocation: %#v", candidate)
+		}
+	}
+}
+
 func TestRankUsesPhraseExtensionEnvironmentAndLexicalSignals(t *testing.T) {
 	generation := registry.Generation{Skills: []skill.Skill{
 		routeFixture("docs:pdf", "pdf", "Read and create PDF documents.", skill.Manifest{

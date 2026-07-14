@@ -49,7 +49,7 @@ func (s scorer) score(request Request, item skill.Skill) (float64, []string, map
 	if containsIdentifier(query, lowerID) {
 		add("exact_id", 100)
 		reasons = append(reasons, "exact_id")
-	} else if containsToken(tokens(query), lowerName) {
+	} else if containsIdentifier(query, lowerName) {
 		add("exact_name", 100)
 		reasons = append(reasons, "exact_name")
 	}
@@ -112,15 +112,6 @@ func containsIdentifier(query, identifier string) bool {
 	for _, field := range strings.Fields(query) {
 		trimmed := strings.Trim(field, "`'\".,;()[]{}")
 		if trimmed == identifier || strings.TrimPrefix(trimmed, "/") == identifier {
-			return true
-		}
-	}
-	return false
-}
-
-func containsToken(values []string, expected string) bool {
-	for _, value := range values {
-		if value == expected {
 			return true
 		}
 	}
