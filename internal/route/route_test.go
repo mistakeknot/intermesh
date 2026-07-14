@@ -93,19 +93,6 @@ func TestTokensDropConversationalFunctionWords(t *testing.T) {
 	}
 }
 
-func TestRankAbstainsWhenEveryCandidateHasOneWeakOverlap(t *testing.T) {
-	generation := registry.Generation{Skills: []skill.Skill{
-		routeFixture("general:conditions", "conditions", "Weather conditions.", skill.Manifest{}),
-		routeFixture("general:horizon", "horizon", "Tomorrow forecast.", skill.Manifest{}),
-	}}
-
-	result := Rank(Request{Query: "weather tomorrow", Limit: 5}, generation)
-
-	if len(result.Candidates) != 0 {
-		t.Fatalf("expected route-level abstention, got %#v", result.Candidates)
-	}
-}
-
 func assertReason(t *testing.T, candidate Candidate, want string) {
 	t.Helper()
 	for _, reason := range candidate.Reasons {

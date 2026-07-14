@@ -2,7 +2,6 @@ package route
 
 import (
 	"sort"
-	"strings"
 
 	"github.com/mistakeknot/intermesh/internal/registry"
 )
@@ -58,10 +57,6 @@ func Rank(request Request, generation registry.Generation) Result {
 			SelectedBy: "rank", RequiredBy: []string{},
 		})
 	}
-	if !hasRouteEvidence(result.Candidates) {
-		result.Candidates = []Candidate{}
-		return result
-	}
 	sort.Slice(result.Candidates, func(i, j int) bool {
 		if result.Candidates[i].Score == result.Candidates[j].Score {
 			return result.Candidates[i].ID < result.Candidates[j].ID
@@ -72,20 +67,4 @@ func Rank(request Request, generation registry.Generation) Result {
 		result.Candidates = result.Candidates[:limit]
 	}
 	return result
-}
-
-func hasRouteEvidence(candidates []Candidate) bool {
-	for _, candidate := range candidates {
-		lexical := 0
-		for key := range candidate.Components {
-			if !strings.HasPrefix(key, "lexical:") {
-				return true
-			}
-			lexical++
-		}
-		if lexical >= 2 {
-			return true
-		}
-	}
-	return false
 }
