@@ -135,6 +135,14 @@ The public regression is observed-derived, not an additional trustworthy
 canary label. Campaign evidence is archived under
 `campaigns/intermesh-routing-v2/`.
 
+Canary session c04 then showed that negated constraints still acted as positive
+evidence: `do not edit` and `do not run` selected autoresearch and documents
+ahead of verification. The `intermesh-routing-v3` campaign excluded the next
+content term after `not`, `no`, `never`, or `without` from positive lexical
+scoring. The c04-derived expected skill moved from rank three to rank one (MRR
+0.3333 to 1.00), with development and locked-holdout metrics unchanged. Its
+evidence is archived under `campaigns/intermesh-routing-v3/`.
+
 ## Campaign contract
 
 Initialize an `intermesh-abstention` campaign with:
