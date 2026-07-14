@@ -60,7 +60,7 @@ This audit maps the persistent goal and implementation-plan must-haves to direct
 
 ## Deliberate holds, not missing scope
 
-- Automatic real-catalog activation is held because observed recall has no trustworthy corpus and adversarial no-match recall is 25%.
+- Automatic real-catalog activation remains held because observed recall has no trustworthy corpus and indirect-paraphrase positive recall is weak. The post-V0 campaign improved abstention without satisfying either production-evidence requirement.
 - The adapters request three skills because five-body loading has a 79 KB p95 context tail.
 - Semantic reranking and learned priors remain future work; Interspect owns calibration.
 - No installer mutates host catalogs. The experiment selected explicit operator-run profiles as the safe V0 wiring.

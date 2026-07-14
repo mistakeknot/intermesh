@@ -8,9 +8,10 @@ trap 'rm -rf "$WORK"' EXIT
 CASES=${INTERMESH_CASES:-$ROOT/testdata/routes/abstention-dev.jsonl}
 BENCH_HOME=${INTERMESH_BENCH_HOME:-$HOME}
 INDEX_SCRIPT=${INTERMESH_INDEX_SCRIPT:-$ROOT/scripts/index-codex-catalog.sh}
+CHECK_GATES=1
 
 usage() {
-    echo "usage: scripts/interlab-abstention.sh [--cases path] [--home path]" >&2
+    echo "usage: scripts/interlab-abstention.sh [--cases path] [--home path] [--report-only]" >&2
 }
 
 while [[ $# -gt 0 ]]; do
@@ -24,6 +25,10 @@ while [[ $# -gt 0 ]]; do
             [[ $# -ge 2 ]] || { usage; exit 2; }
             BENCH_HOME=$2
             shift 2
+            ;;
+        --report-only)
+            CHECK_GATES=0
+            shift
             ;;
         -h|--help)
             usage
@@ -63,11 +68,12 @@ INTERMESH_BIN="$INTERMESH_BIN" "$INDEX_SCRIPT" --home "$BENCH_HOME" --db "$datab
     --warmups 1 \
     --runs 5 > "$WORK/eval.json"
 
-python3 - "$WORK/eval.json" <<'PY'
+python3 - "$WORK/eval.json" "$CHECK_GATES" <<'PY'
 import json
 import sys
 
 report = json.load(open(sys.argv[1]))
+check_gates = bool(int(sys.argv[2]))
 metrics = report["metrics"]
 values = {
     "no_match_recall": metrics["no_match_recall"],
@@ -89,7 +95,7 @@ if values["no_match_precision"] < 0.80:
     failures.append("no_match_precision below 0.80")
 if values["warm_p95_micros"] >= 50_000:
     failures.append("warm_p95_micros is not below 50000")
-if failures:
+if check_gates and failures:
     print("benchmark constraints failed: " + "; ".join(failures), file=sys.stderr)
     raise SystemExit(1)
 PY

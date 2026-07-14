@@ -76,6 +76,30 @@ The holdout is evaluated before and after a campaign, not used to choose each
 mutation. Its weak starting positive recall is direct evidence that the current
 lexical router does not yet generalize well to indirect paraphrases.
 
+Report holdout metrics without applying the development guardrails:
+
+```bash
+bash scripts/interlab-abstention.sh \
+  --cases testdata/routes/abstention-holdout.jsonl \
+  --report-only
+```
+
+## First campaign result
+
+The `intermesh-abstention-v1` campaign retained two stopword mutations and
+reverted an over-aggressive route-level gate after the holdout exposed a
+generalization regression:
+
+| Corpus | No-match before | No-match retained | Positive top-3/top-5 |
+|---|---:|---:|---:|
+| Original V0 four-case set | 25% | 100% | Adversarial match cases unchanged at 100%/100% |
+| Development | 20% | 73.3% | Unchanged at 96.7%/100% |
+| Locked holdout | 5% | 40% | Unchanged at 60%/70% |
+
+The development-perfect route-level gate was not retained: it reduced holdout
+top-3/top-5 to 50%/60% and MRR by more than 20%. The raw campaign record and
+validated learnings are archived under `campaigns/intermesh-abstention-v1/`.
+
 ## Register Interlab with Codex
 
 The Interlab skill alone is not enough; Codex must also expose its stateless MCP

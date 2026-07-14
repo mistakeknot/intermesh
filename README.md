@@ -10,7 +10,7 @@ The agent host remains responsible for loading and following selected instructio
 
 ## Status
 
-V0 validated, with catalog activation intentionally opt-in. The live-catalog experiment measured 100% deterministic top-5 recall, 96.7% top-3 recall, 99.48% modeled always-on metadata reduction, and 3.2 ms warm p95 routing. Observed recall is still insufficient and no-match abstention needs improvement, so Intermesh does not automatically replace a host catalog. See the [experiment report](docs/reports/intermesh-v0-experiment.md).
+V0 validated, with catalog activation intentionally opt-in. The live-catalog experiment measured 100% deterministic top-5 recall, 96.7% top-3 recall, and 99.48% modeled always-on metadata reduction. A subsequent guarded Interlab campaign raised no-match recall from 25% to 100% on the original four-case set, from 20% to 73.3% on a 30-case development set, and from 5% to 40% on a locked holdout without reducing positive recall. Observed route outcomes are still insufficient and indirect-paraphrase recall remains weak, so Intermesh does not automatically replace a host catalog. See the [V0 experiment](docs/reports/intermesh-v0-experiment.md) and [campaign learnings](campaigns/intermesh-abstention-v1/learnings.md).
 
 ## Build
 

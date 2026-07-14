@@ -124,4 +124,13 @@ if EVAL_JSON="$TMP/eval-bad.json" \
 fi
 grep -Fq 'top3_recall below 0.95' "$TMP/bad.err" || fail "constraint diagnostic missing"
 
+EVAL_JSON="$TMP/eval-bad.json" \
+INTERMESH_BIN="$fake_intermesh" \
+INTERMESH_EVAL_BIN="$fake_eval" \
+INTERMESH_INDEX_SCRIPT="$fake_index" \
+INTERMESH_BENCH_HOME="$fixture_home" \
+INTERMESH_SKIP_TESTS=1 \
+    "$ROOT/scripts/interlab-abstention.sh" --report-only > "$TMP/report-only.txt"
+assert_contains "$TMP/report-only.txt" 'METRIC top3_recall=0.9'
+
 echo "setup script tests: PASS"

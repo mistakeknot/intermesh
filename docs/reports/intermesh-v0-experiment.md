@@ -12,6 +12,17 @@ Land the CLI, registry, adapters, diagnostics, and reversible profile mechanism.
 
 The experiment proves the architecture can remove always-on skill metadata. It does not prove every routed request uses less total context, because selected `SKILL.md` bodies are larger than their descriptions. The adapters therefore request three candidates, not five.
 
+### Post-V0 abstention follow-up
+
+The table below remains the immutable V0 baseline. A later guarded Interlab
+campaign retained conversational-function-word filtering and reran the same
+catalog: original four-case no-match recall improved from 25% to 100%, while
+deterministic top-3/top-5 stayed 96.7%/100%. On larger synthetic sets,
+development no-match recall improved from 20% to 73.3% and locked-holdout
+no-match recall from 5% to 40%, with each set's positive recall unchanged. A
+development-perfect route-level gate was reverted because it reduced holdout
+positive recall. See [campaign learnings](../../campaigns/intermesh-abstention-v1/learnings.md).
+
 ## Method
 
 - Host and date: Codex on macOS, 2026-07-14.
@@ -73,7 +84,7 @@ All mandatory V0 gates pass except observed recall, which is correctly classifie
 
 Highest-value follow-ups:
 
-1. Add an abstention threshold or calibrated no-skill classifier; weather, arithmetic, and joke requests currently receive lexical false positives.
+1. Expand positive paraphrase coverage and use a balanced abstention/positive-recall objective before attempting another structural abstention gate.
 2. Join `intermesh.route.v1` receipts to real outcomes in Interspect and rerun observed recall at 30+ trustworthy labels.
 3. Measure actual host prompt tokens after an opt-in managed-profile trial; byte modeling is not a substitute for host telemetry.
 4. Consider a bounded body-byte budget or two-stage selection if p95 selected-skill context remains above the baseline.
