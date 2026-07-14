@@ -1,0 +1,60 @@
+{"id":"dev-match-debug","kind":"synthetic-match","query":"debug this unexpected test failure","expected":["intertest:systematic-debugging"]}
+{"id":"dev-match-tdd","kind":"synthetic-match","query":"use intertest:test-driven-development for this feature","expected":["intertest:test-driven-development"]}
+{"id":"dev-match-verify","kind":"synthetic-match","query":"verify this change before claiming complete","expected":["intertest:verification-before-completion"]}
+{"id":"dev-match-plan","kind":"synthetic-match","query":"write an implementation plan from requirements","expected":["clavain:writing-plans"]}
+{"id":"dev-match-ship","kind":"synthetic-match","query":"we are done commit push close beads","expected":["clavain:ship"]}
+{"id":"dev-match-refactor","kind":"synthetic-match","query":"use clavain:refactor-safely on this duplicated code","expected":["clavain:refactor-safely"]}
+{"id":"dev-match-chrome","kind":"synthetic-match","query":"control my logged-in Chrome tab","expected":["chrome:control-chrome"]}
+{"id":"dev-match-pdf","kind":"synthetic-match","query":"create a PDF and verify visual layout","expected":["pdf:pdf"]}
+{"id":"dev-match-xlsx","kind":"synthetic-match","query":"create an xlsx spreadsheet","expected":["spreadsheets:spreadsheets"]}
+{"id":"dev-match-powerpoint","kind":"synthetic-match","query":"create a PowerPoint presentation","expected":["presentations:presentations"]}
+{"id":"dev-match-outlook","kind":"synthetic-match","query":"triage my Outlook inbox","expected":["outlook-email:outlook-email-inbox-triage"]}
+{"id":"dev-match-slack","kind":"synthetic-match","query":"draft a reply to this Slack message","expected":["slack:slack-reply-drafting"]}
+{"id":"dev-match-schedule","kind":"synthetic-match","query":"schedule a meeting for several people in Outlook","expected":["outlook-calendar:outlook-calendar-group-scheduler"]}
+{"id":"dev-match-teams","kind":"synthetic-match","query":"summarize a Teams channel","expected":["teams:teams-channel-summarization"]}
+{"id":"dev-match-sharepoint","kind":"synthetic-match","query":"find the right SharePoint site","expected":["sharepoint:sharepoint-site-discovery"]}
+{"id":"dev-match-image","kind":"synthetic-match","query":"generate a raster image","expected":["codex-system:imagegen"]}
+{"id":"dev-match-ui","kind":"synthetic-match","query":"create a distinctive production-grade interface","expected":["interform:distinctive-design"]}
+{"id":"dev-match-tui","kind":"synthetic-match","query":"test terminal TUI layout","expected":["tuivision:tui-test"]}
+{"id":"dev-match-session","kind":"synthetic-match","query":"search past agent sessions","expected":["intersearch:session-search"]}
+{"id":"dev-match-skill","kind":"synthetic-match","query":"create a new Agent Skill","expected":["interskill:skill","codex-system:skill-creator"]}
+{"id":"dev-match-research","kind":"synthetic-match","query":"run interdeep:deep-research on this topic","expected":["interdeep:deep-research"]}
+{"id":"dev-match-tool-time","kind":"synthetic-match","query":"analyze tool usage patterns and suggest workflow improvements","expected":["tool-time:tool-time","tool-time:tool-time-codex"]}
+{"id":"dev-match-doc-drift","kind":"synthetic-match","query":"detect documentation drift and refresh stale docs","expected":["interwatch:doc-watch"]}
+{"id":"dev-match-todos","kind":"synthetic-match","query":"manage file based todos in the todos directory","expected":["clavain:file-todos"]}
+{"id":"dev-match-uxr","kind":"synthetic-match","query":"create a synthetic anonymized UXR interview transcript","expected":["local:argus"]}
+{"id":"dev-match-docx","kind":"synthetic-match","query":"read and redline a docx Word document","expected":["documents:documents"]}
+{"id":"dev-match-site","kind":"synthetic-match","query":"build a website landing page","expected":["sites:sites-building"]}
+{"id":"dev-match-host","kind":"synthetic-match","query":"host publish and deploy this website","expected":["sites:sites-hosting"]}
+{"id":"dev-match-calendar","kind":"synthetic-match","query":"clear part of my Outlook schedule to make free time","expected":["outlook-calendar:outlook-calendar-free-up-time"]}
+{"id":"dev-match-email-actions","kind":"synthetic-match","query":"extract action items and deadlines from Outlook email","expected":["outlook-email:outlook-email-task-extraction"]}
+{"id":"dev-none-weather","kind":"synthetic-no-match","query":"what is the weather in Chicago","no_match":true}
+{"id":"dev-none-arithmetic","kind":"synthetic-no-match","query":"calculate 2 plus 2","no_match":true}
+{"id":"dev-none-nonsense","kind":"synthetic-no-match","query":"quuxblorf snazzle","no_match":true}
+{"id":"dev-none-joke","kind":"synthetic-no-match","query":"tell me a joke about penguins","no_match":true}
+{"id":"dev-none-capital","kind":"synthetic-no-match","query":"what is the capital of France","no_match":true}
+{"id":"dev-none-prime","kind":"synthetic-no-match","query":"is 97 a prime number","no_match":true}
+{"id":"dev-none-convert","kind":"synthetic-no-match","query":"convert 12 miles to kilometers","no_match":true}
+{"id":"dev-none-definition","kind":"synthetic-no-match","query":"define the word perspicacious","no_match":true}
+{"id":"dev-none-synonym","kind":"synthetic-no-match","query":"give me a synonym for happy","no_match":true}
+{"id":"dev-none-riddle","kind":"synthetic-no-match","query":"answer this riddle: what has keys but no locks","no_match":true}
+{"id":"dev-none-recipe","kind":"synthetic-no-match","query":"how long should I boil an egg","no_match":true}
+{"id":"dev-none-color","kind":"synthetic-no-match","query":"what color do blue and yellow make","no_match":true}
+{"id":"dev-none-planet","kind":"synthetic-no-match","query":"which planet is closest to the sun","no_match":true}
+{"id":"dev-none-history","kind":"synthetic-no-match","query":"when did the Berlin Wall fall","no_match":true}
+{"id":"dev-none-time","kind":"synthetic-no-match","query":"what time is noon UTC in Chicago","no_match":true}
+{"id":"dev-none-equation","kind":"synthetic-no-match","query":"solve x plus 7 equals 12","no_match":true}
+{"id":"dev-none-percentage","kind":"synthetic-no-match","query":"what is fifteen percent of eighty","no_match":true}
+{"id":"dev-none-alphabet","kind":"synthetic-no-match","query":"what letter comes after q","no_match":true}
+{"id":"dev-none-greeting","kind":"synthetic-no-match","query":"good morning how are you","no_match":true}
+{"id":"dev-none-haiku","kind":"synthetic-no-match","query":"write a short haiku about rain","no_match":true}
+{"id":"dev-none-count","kind":"synthetic-no-match","query":"count backward from ten","no_match":true}
+{"id":"dev-none-grammar","kind":"synthetic-no-match","query":"is this sentence grammatically correct: cats is playful","no_match":true}
+{"id":"dev-none-roman","kind":"synthetic-no-match","query":"write forty nine in Roman numerals","no_match":true}
+{"id":"dev-none-fraction","kind":"synthetic-no-match","query":"simplify the fraction eighteen over twenty four","no_match":true}
+{"id":"dev-none-animal","kind":"synthetic-no-match","query":"how many legs does a spider have","no_match":true}
+{"id":"dev-none-ocean","kind":"synthetic-no-match","query":"name the largest ocean","no_match":true}
+{"id":"dev-none-temperature","kind":"synthetic-no-match","query":"is twenty Celsius warmer than sixty Fahrenheit","no_match":true}
+{"id":"dev-none-sequence","kind":"synthetic-no-match","query":"continue the sequence two four six eight","no_match":true}
+{"id":"dev-none-spelling","kind":"synthetic-no-match","query":"how do you spell accommodation","no_match":true}
+{"id":"dev-none-smalltalk","kind":"synthetic-no-match","query":"what is your favorite season","no_match":true}

@@ -1,6 +1,7 @@
 package eval
 
 import (
+	"os"
 	"strings"
 	"testing"
 )
@@ -56,6 +57,53 @@ func TestPercentileUsesNearestRank(t *testing.T) {
 	}
 	if got := Percentile(values, 0.95); got != 50 {
 		t.Fatalf("p95=%d", got)
+	}
+}
+
+func TestAbstentionCorporaAreSizedAndDisjoint(t *testing.T) {
+	development := loadCorpusFile(t, "../../testdata/routes/abstention-dev.jsonl")
+	holdout := loadCorpusFile(t, "../../testdata/routes/abstention-holdout.jsonl")
+
+	assertCorpusBalance(t, "development", development, 30, 30)
+	assertCorpusBalance(t, "holdout", holdout, 20, 20)
+
+	developmentIDs := make(map[string]struct{}, len(development))
+	for _, item := range development {
+		developmentIDs[item.ID] = struct{}{}
+	}
+	for _, item := range holdout {
+		if _, exists := developmentIDs[item.ID]; exists {
+			t.Fatalf("case %q appears in both development and holdout corpora", item.ID)
+		}
+	}
+}
+
+func loadCorpusFile(t *testing.T, path string) []Case {
+	t.Helper()
+	file, err := os.Open(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer file.Close()
+	cases, err := LoadCases(file)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return cases
+}
+
+func assertCorpusBalance(t *testing.T, name string, cases []Case, minimumMatch, minimumNoMatch int) {
+	t.Helper()
+	var match, noMatch int
+	for _, item := range cases {
+		if item.NoMatch {
+			noMatch++
+		} else {
+			match++
+		}
+	}
+	if match < minimumMatch || noMatch < minimumNoMatch {
+		t.Fatalf("%s corpus has %d match and %d no-match cases; need at least %d and %d", name, match, noMatch, minimumMatch, minimumNoMatch)
 	}
 }
 

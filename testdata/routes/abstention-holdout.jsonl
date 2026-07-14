@@ -1,0 +1,40 @@
+{"id":"holdout-match-debug","kind":"synthetic-match","query":"investigate the root cause before changing this broken build","expected":["intertest:systematic-debugging"]}
+{"id":"holdout-match-tdd","kind":"synthetic-match","query":"implement this behavior test first with a red green cycle","expected":["intertest:test-driven-development"]}
+{"id":"holdout-match-verify","kind":"synthetic-match","query":"prove the fix with fresh checks before saying it works","expected":["intertest:verification-before-completion"]}
+{"id":"holdout-match-plan","kind":"synthetic-match","query":"turn these requirements into a stepwise engineering plan","expected":["clavain:writing-plans"]}
+{"id":"holdout-match-ship","kind":"synthetic-match","query":"land the completed change and close its tracked work","expected":["clavain:ship"]}
+{"id":"holdout-match-chrome","kind":"synthetic-match","query":"operate the authenticated tab already open in Chrome","expected":["chrome:control-chrome"]}
+{"id":"holdout-match-pdf","kind":"synthetic-match","query":"inspect this PDF and render its pages for layout review","expected":["pdf:pdf"]}
+{"id":"holdout-match-sheet","kind":"synthetic-match","query":"build and verify an Excel workbook with formulas","expected":["spreadsheets:spreadsheets"]}
+{"id":"holdout-match-deck","kind":"synthetic-match","query":"prepare an editable presentation deck","expected":["presentations:presentations"]}
+{"id":"holdout-match-inbox","kind":"synthetic-match","query":"organize the messages in my Outlook inbox by action needed","expected":["outlook-email:outlook-email-inbox-triage"]}
+{"id":"holdout-match-slack","kind":"synthetic-match","query":"compose a response for the Slack thread","expected":["slack:slack-reply-drafting"]}
+{"id":"holdout-match-meeting","kind":"synthetic-match","query":"find a mutually available Outlook meeting slot for the group","expected":["outlook-calendar:outlook-calendar-group-scheduler"]}
+{"id":"holdout-match-teams","kind":"synthetic-match","query":"give me a digest of activity in this Teams channel","expected":["teams:teams-channel-summarization"]}
+{"id":"holdout-match-sharepoint","kind":"synthetic-match","query":"locate which SharePoint workspace contains this material","expected":["sharepoint:sharepoint-site-discovery"]}
+{"id":"holdout-match-image","kind":"synthetic-match","query":"make a new raster illustration from this scene description","expected":["codex-system:imagegen"]}
+{"id":"holdout-match-design","kind":"synthetic-match","query":"design a polished interface with a distinctive visual system","expected":["interform:distinctive-design"]}
+{"id":"holdout-match-tui","kind":"synthetic-match","query":"exercise the interactive terminal UI and inspect its rendering","expected":["tuivision:tui-test"]}
+{"id":"holdout-match-sessions","kind":"synthetic-match","query":"find where we discussed this in an earlier agent session","expected":["intersearch:session-search"]}
+{"id":"holdout-match-doc-watch","kind":"synthetic-match","query":"check whether project documentation has drifted from the implementation","expected":["interwatch:doc-watch"]}
+{"id":"holdout-match-autoresearch","kind":"synthetic-match","query":"run a continuous benchmark optimization campaign and keep only improvements","expected":["interlab:autoresearch"]}
+{"id":"holdout-none-weather","kind":"synthetic-no-match","query":"will it rain tomorrow afternoon","no_match":true}
+{"id":"holdout-none-multiply","kind":"synthetic-no-match","query":"multiply seventeen by six","no_match":true}
+{"id":"holdout-none-trivia","kind":"synthetic-no-match","query":"who painted the Mona Lisa","no_match":true}
+{"id":"holdout-none-translate","kind":"synthetic-no-match","query":"translate bonjour into English","no_match":true}
+{"id":"holdout-none-unit","kind":"synthetic-no-match","query":"how many teaspoons are in a tablespoon","no_match":true}
+{"id":"holdout-none-poem","kind":"synthetic-no-match","query":"write four lines of verse about the moon","no_match":true}
+{"id":"holdout-none-fact","kind":"synthetic-no-match","query":"what gas do plants absorb","no_match":true}
+{"id":"holdout-none-age","kind":"synthetic-no-match","query":"how old is someone born in 1990","no_match":true}
+{"id":"holdout-none-order","kind":"synthetic-no-match","query":"put apple banana cherry in alphabetical order","no_match":true}
+{"id":"holdout-none-antonym","kind":"synthetic-no-match","query":"what is the opposite of scarce","no_match":true}
+{"id":"holdout-none-shape","kind":"synthetic-no-match","query":"how many sides are on a hexagon","no_match":true}
+{"id":"holdout-none-music","kind":"synthetic-no-match","query":"name the notes in a C major chord","no_match":true}
+{"id":"holdout-none-geography","kind":"synthetic-no-match","query":"which continent contains Kenya","no_match":true}
+{"id":"holdout-none-probability","kind":"synthetic-no-match","query":"what is the chance of heads on a fair coin","no_match":true}
+{"id":"holdout-none-days","kind":"synthetic-no-match","query":"how many days are in a leap year","no_match":true}
+{"id":"holdout-none-vowels","kind":"synthetic-no-match","query":"list the vowels in English","no_match":true}
+{"id":"holdout-none-food","kind":"synthetic-no-match","query":"suggest a simple sandwich filling","no_match":true}
+{"id":"holdout-none-logic","kind":"synthetic-no-match","query":"if all roses are flowers is every flower a rose","no_match":true}
+{"id":"holdout-none-round","kind":"synthetic-no-match","query":"round 3.14159 to two decimal places","no_match":true}
+{"id":"holdout-none-chat","kind":"synthetic-no-match","query":"tell me something cheerful","no_match":true}

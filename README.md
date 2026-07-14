@@ -19,6 +19,21 @@ go test ./...
 go build -o ./bin/intermesh ./cmd/intermesh
 ```
 
+Install the current checkout and build a persistent registry from the active
+Codex catalogs:
+
+```bash
+mkdir -p "$HOME/.local/bin"
+GOBIN="$HOME/.local/bin" go install ./cmd/intermesh
+export PATH="$HOME/.local/bin:$PATH"
+scripts/index-codex-catalog.sh
+intermesh doctor
+```
+
+The catalog helper discovers direct Codex plugins, versioned plugin-cache
+skills, local dotfile skills, and Codex system skills. It only reads canonical
+files and transactionally rebuilds the derived registry.
+
 The registry is derived local state. Index one or more canonical roots with an explicit namespace:
 
 ```bash
@@ -51,6 +66,16 @@ Interskill optionally validates relationship manifests when this CLI is availabl
 - `adapters/hermes/` — context-saving through a dedicated native router-only profile.
 
 All adapters request three candidates by default, then load the returned `SKILL.md` files in dependency order. The source catalog remains outside the host's automatic discovery roots.
+
+## Testing and optimization
+
+Run the fixed V0 experiment with `scripts/experiment.sh --check-gates`. For a
+larger abstention-development corpus and Interlab-compatible `METRIC` output,
+run `scripts/interlab-abstention.sh`. The benchmark fails closed if positive
+top-3/top-5 recall, no-match precision, or warm latency cross their guardrails.
+
+See [Testing and hill climbing](docs/guides/testing-and-hill-climbing.md) for
+Interlab registration, campaign scope, baseline results, and holdout policy.
 
 ## Architecture
 
