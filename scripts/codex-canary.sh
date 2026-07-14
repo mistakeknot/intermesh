@@ -284,7 +284,13 @@ run_canary() {
         shift
     fi
     [[ -d "$workspace" ]] || die "workspace is not a directory: $workspace"
-    (cd "$workspace" && canary_env "$CODEX_BIN" "$@")
+    (
+        cd "$workspace"
+        canary_env "$CODEX_BIN" \
+            --sandbox workspace-write \
+            --add-dir "$CANARY_ROOT" \
+            "$@"
+    )
 }
 
 exec_canary() {
@@ -336,7 +342,10 @@ exec_canary() {
     set +e
     (
         cd "$workspace"
-        canary_env "$CODEX_BIN" exec --ephemeral --json "$prompt"
+        canary_env "$CODEX_BIN" \
+            --sandbox workspace-write \
+            --add-dir "$CANARY_ROOT" \
+            exec --ephemeral --json "$prompt"
     ) | tee "$events"
     local codex_status=${PIPESTATUS[0]}
     set -e

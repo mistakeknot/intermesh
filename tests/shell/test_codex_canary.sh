@@ -32,6 +32,8 @@ printf '%s\n' 'normal-profile-sentinel' > "$normal_home/.codex/config.toml"
 printf '%s\n' '---' 'name: intermesh-router' 'description: Route through Intermesh.' '---' > "$router/SKILL.md"
 
 index_capture="$TMP/index-args.txt"
+exec_capture="$TMP/codex-exec-args.txt"
+run_capture="$TMP/codex-run-args.txt"
 fake_index="$TMP/fake-index.sh"
 cat > "$fake_index" <<'SH'
 #!/usr/bin/env bash
@@ -89,6 +91,14 @@ fake_codex="$TMP/fake-codex"
 cat > "$fake_codex" <<'SH'
 #!/usr/bin/env bash
 set -euo pipefail
+has_arg() {
+    local wanted=$1 argument
+    shift
+    for argument in "$@"; do
+        [[ "$argument" == "$wanted" ]] && return 0
+    done
+    return 1
+}
 if [[ "${1:-}" == "debug" && "${2:-}" == "prompt-input" ]]; then
     if [[ "${CODEX_HOME:-}" == "$CANARY_CODEX_HOME" ]]; then
         cat "$CANARY_PROMPT"
@@ -97,7 +107,8 @@ if [[ "${1:-}" == "debug" && "${2:-}" == "prompt-input" ]]; then
     fi
     exit 0
 fi
-if [[ "${1:-}" == "exec" ]]; then
+if has_arg "exec" "$@"; then
+    printf '%s\n' "$@" > "$CODEX_EXEC_CAPTURE"
     mkdir -p "$XDG_STATE_HOME/intermesh"
     printf '%s\n' '{"event":"intermesh.route.v1","route_id":"route-test","candidates":[{"id":"intertest:verification-before-completion","skill_md":"/catalog/verify/SKILL.md"}],"warnings":[],"latency_micros":1200}' >> "$XDG_STATE_HOME/intermesh/routes.jsonl"
     printf '%s\n' \
@@ -109,6 +120,10 @@ if [[ "${1:-}" == "exec" ]]; then
 fi
 if [[ "${1:-}" == "login" ]]; then
     printf '%s\n' "login-home=$HOME" "login-codex-home=$CODEX_HOME"
+    exit 0
+fi
+if [[ -n "${CODEX_RUN_CAPTURE:-}" ]]; then
+    printf '%s\n' "$@" > "$CODEX_RUN_CAPTURE"
     exit 0
 fi
 echo "unexpected fake codex invocation: $*" >&2
@@ -125,6 +140,8 @@ common_env=(
     INTERMESH_BIN="$fake_intermesh"
     CODEX_BIN="$fake_codex"
     INDEX_CAPTURE="$index_capture"
+    CODEX_EXEC_CAPTURE="$exec_capture"
+    CODEX_RUN_CAPTURE="$run_capture"
     BASELINE_PROMPT="$baseline_prompt"
     CANARY_PROMPT="$canary_prompt"
     CANARY_CODEX_HOME="$canary_root/codex"
@@ -154,6 +171,13 @@ assert_json "$TMP/context.json" '"skills" not in value["baseline"] and "skills" 
 env "${common_env[@]}" "$ROOT/scripts/codex-canary.sh" doctor --workspace "$workspace" > "$TMP/doctor.json"
 assert_json "$TMP/doctor.json" 'value["healthy"] is True and value["unexpected_non_system_skills"] == []'
 
+env "${common_env[@]}" "$ROOT/scripts/codex-canary.sh" run \
+    --workspace "$workspace" -- --version
+grep -Fqx -- '--sandbox' "$run_capture" || fail "run sandbox flag missing"
+grep -Fqx -- 'workspace-write' "$run_capture" || fail "run workspace-write mode missing"
+grep -Fqx -- '--add-dir' "$run_capture" || fail "run canary writable-root flag missing"
+grep -Fqx -- "$canary_root" "$run_capture" || fail "run canary writable-root value missing"
+
 env "${common_env[@]}" "$ROOT/scripts/codex-canary.sh" report > "$TMP/empty-report.json"
 assert_json "$TMP/empty-report.json" 'value["verdict"] == "hold" and value["sessions"] == 0'
 
@@ -163,6 +187,12 @@ for index in $(seq 1 20); do
         --session "$session" --workspace "$workspace" \
         --expected intertest:verification-before-completion \
         -- "verify the change" > "$TMP/$session.events"
+    if [[ "$index" -eq 1 ]]; then
+        grep -Fqx -- '--sandbox' "$exec_capture" || fail "exec sandbox flag missing"
+        grep -Fqx -- 'workspace-write' "$exec_capture" || fail "exec workspace-write mode missing"
+        grep -Fqx -- '--add-dir' "$exec_capture" || fail "exec canary writable-root flag missing"
+        grep -Fqx -- "$canary_root" "$exec_capture" || fail "exec canary writable-root value missing"
+    fi
     env "${common_env[@]}" "$ROOT/scripts/codex-canary.sh" label \
         --session "$session" --task pass --routing correct \
         --note "synthetic shell test" > "$TMP/$session.label.json"

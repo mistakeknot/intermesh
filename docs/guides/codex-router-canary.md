@@ -30,6 +30,12 @@ developer tools retain their ordinary user configuration. No auth file, plugin,
 skill body, or normal Codex configuration is copied or changed. The workflow
 uses no Tailscale or personal infrastructure.
 
+The `run` and `exec` launchers select Codex's `workspace-write` sandbox and add
+only the isolated canary root as an extra writable directory. Project access
+therefore keeps the normal Codex workspace boundary, while Intermesh can update
+its private SQLite registry (including WAL files) and append route receipts.
+The normal home and normal Codex profile are not added as writable roots.
+
 ## Set up and verify
 
 Install Intermesh first, then create the canary:
