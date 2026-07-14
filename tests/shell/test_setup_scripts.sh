@@ -14,8 +14,12 @@ for host in codex claude-code hermes; do
     router_skill="$ROOT/adapters/$host/intermesh-router/SKILL.md"
     grep -Fq 'Treat ranked candidates as retrieval results, not automatically selected skills.' "$router_skill" || \
         fail "$host router must distinguish retrieved candidates from selected skills"
-    grep -Fq 'Read the complete `skill_md` only for candidates whose descriptions apply' "$router_skill" || \
+    grep -Fq 'Read the complete `skill_md` for that final set' "$router_skill" || \
         fail "$host router must progressively load applicable skill bodies"
+    grep -Fq '`required_by` dependency closure' "$router_skill" || \
+        fail "$host router must preserve requirements for dual-role ranked candidates"
+    grep -Fq '`conflicts_with` intersection' "$router_skill" || \
+        fail "$host router must filter conflicts after applicability selection"
     if grep -Fq 'Read every returned `candidates[].skill_md` file completely' "$router_skill"; then
         fail "$host router must not fully load every retrieved candidate"
     fi

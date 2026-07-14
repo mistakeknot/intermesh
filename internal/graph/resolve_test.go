@@ -85,6 +85,31 @@ func TestResolveDeduplicatesDiamondRequirements(t *testing.T) {
 	}
 }
 
+func TestResolvePreservesRequiredByWhenRequirementAlsoRanked(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		graphSkill("fixture:a", []string{"fixture:b"}, nil),
+		graphSkill("fixture:b", nil, nil),
+	}}
+	input := route.Result{Candidates: []route.Candidate{
+		{ID: "fixture:a", SelectedBy: "rank"},
+		{ID: "fixture:b", SelectedBy: "rank"},
+	}}
+
+	got, err := Resolve(input, generation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, candidate := range got.Candidates {
+		if candidate.ID == "fixture:b" {
+			if candidate.SelectedBy != "rank" || len(candidate.RequiredBy) != 1 || candidate.RequiredBy[0] != "fixture:a" {
+				t.Fatalf("dual-role dependency provenance missing: %#v", candidate)
+			}
+			return
+		}
+	}
+	t.Fatalf("required ranked candidate missing: %#v", got.Candidates)
+}
+
 func TestResolveReportsExactCycle(t *testing.T) {
 	generation := registry.Generation{Skills: []skill.Skill{
 		graphSkill("fixture:a", []string{"fixture:b"}, nil),
@@ -122,5 +147,8 @@ func TestResolveSurfacesConflictWithoutDroppingCandidates(t *testing.T) {
 	}
 	if len(got.Candidates) != 2 || len(got.Warnings) != 1 || !strings.Contains(got.Warnings[0], "conflicts") {
 		t.Fatalf("conflict was not surfaced correctly: %#v", got)
+	}
+	if len(got.Candidates[0].ConflictsWith) != 1 || got.Candidates[0].ConflictsWith[0] != "fixture:b" {
+		t.Fatalf("candidate conflict metadata missing: %#v", got.Candidates)
 	}
 }

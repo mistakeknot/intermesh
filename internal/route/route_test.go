@@ -44,7 +44,7 @@ func TestRankExactIDWins(t *testing.T) {
 
 func TestRankIncludesDescriptionForProgressiveSelection(t *testing.T) {
 	generation := registry.Generation{Skills: []skill.Skill{
-		routeFixture("intertest:verify", "verify", "Verify completed engineering work.", skill.Manifest{}),
+		routeFixture("intertest:verify", "verify", "Verify completed engineering work.", skill.Manifest{ConflictsWith: []string{"fixture:fast"}}),
 	}}
 
 	result := Rank(Request{Query: "verify engineering work", Limit: 1}, generation)
@@ -54,6 +54,9 @@ func TestRankIncludesDescriptionForProgressiveSelection(t *testing.T) {
 	}
 	if !strings.Contains(string(payload), `"description":"Verify completed engineering work."`) {
 		t.Fatalf("candidate description missing from route JSON: %s", payload)
+	}
+	if !strings.Contains(string(payload), `"conflicts_with":["fixture:fast"]`) {
+		t.Fatalf("candidate conflict metadata missing from route JSON: %s", payload)
 	}
 }
 

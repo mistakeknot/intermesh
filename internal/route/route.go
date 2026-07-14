@@ -18,14 +18,15 @@ type Request struct {
 }
 
 type Candidate struct {
-	ID          string             `json:"id"`
-	Description string             `json:"description,omitempty"`
-	SkillMD     string             `json:"skill_md"`
-	Score       float64            `json:"score"`
-	Reasons     []string           `json:"reasons"`
-	Components  map[string]float64 `json:"components,omitempty"`
-	SelectedBy  string             `json:"selected_by"`
-	RequiredBy  []string           `json:"required_by"`
+	ID            string             `json:"id"`
+	Description   string             `json:"description,omitempty"`
+	SkillMD       string             `json:"skill_md"`
+	Score         float64            `json:"score"`
+	Reasons       []string           `json:"reasons"`
+	Components    map[string]float64 `json:"components,omitempty"`
+	SelectedBy    string             `json:"selected_by"`
+	RequiredBy    []string           `json:"required_by"`
+	ConflictsWith []string           `json:"conflicts_with,omitempty"`
 }
 
 type Result struct {
@@ -55,7 +56,7 @@ func Rank(request Request, generation registry.Generation) Result {
 		}
 		result.Candidates = append(result.Candidates, Candidate{
 			ID: item.ID, Description: item.Description, SkillMD: item.SkillMD, Score: score, Reasons: reasons, Components: components,
-			SelectedBy: "rank", RequiredBy: []string{},
+			SelectedBy: "rank", RequiredBy: []string{}, ConflictsWith: append([]string(nil), item.Manifest.ConflictsWith...),
 		})
 	}
 	sort.Slice(result.Candidates, func(i, j int) bool {

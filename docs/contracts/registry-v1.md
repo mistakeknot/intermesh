@@ -78,7 +78,8 @@ The fingerprint is `sha256:<hex>` over sorted normalized canonical records. It i
       "score": 12.5,
       "reasons": ["phrase:verify", "lexical:completion"],
       "selected_by": "rank",
-      "required_by": []
+      "required_by": [],
+      "conflicts_with": []
     }
   ],
   "warnings": []
@@ -88,8 +89,12 @@ The fingerprint is `sha256:<hex>` over sorted normalized canonical records. It i
 The result is bounded by the requested limit before requirements are expanded.
 `description` is the canonical SKILL.md frontmatter description and lets a host
 make a bounded applicability decision before loading any complete skill body.
-Required candidates use `selected_by: "requirement"` and name their parent IDs
-under `required_by`.
+Required candidates use `selected_by: "requirement"` when they were not also
+ranked and name their parent IDs under `required_by`. A ranked candidate may
+also be required; `required_by` is authoritative for computing the dependency
+closure. `conflicts_with` lets the host defer potential conflict warnings until
+applicability selection and surface a conflict only when both endpoints remain
+selected.
 
 ## Route receipt V1
 

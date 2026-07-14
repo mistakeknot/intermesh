@@ -84,8 +84,9 @@ Interskill optionally validates relationship manifests when this CLI is availabl
 All adapters request three candidates by default. Route JSON includes each
 candidate's canonical frontmatter description, so the host can apply trigger
 boundaries before loading complete bodies. Adapters fully load only applicable
-skills and their declared requirements, in dependency order. The source catalog
-remains outside the host's automatic discovery roots.
+skills and the complete `required_by` closure, filter potential conflicts
+against that final selected set, and preserve dependency order. The source
+catalog remains outside the host's automatic discovery roots.
 
 ## Testing and optimization
 

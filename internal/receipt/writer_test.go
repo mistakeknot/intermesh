@@ -18,7 +18,7 @@ func TestAppendOmitsRawQueryByDefault(t *testing.T) {
 	writer := Writer{Path: path, Now: func() time.Time { return time.Unix(10, 0).UTC() }}
 	result := route.Result{
 		Version: 1, Query: "secret user query", Host: "codex", RegistryFingerprint: "sha256:test",
-		Candidates: []route.Candidate{{ID: "fixture:test", Description: "routing-only candidate metadata", Score: 10}},
+		Candidates: []route.Candidate{{ID: "fixture:test", Description: "routing-only candidate metadata", ConflictsWith: []string{"fixture:private-neighbor"}, Score: 10}},
 	}
 
 	if err := writer.Append(context.Background(), result, Metadata{Latency: 3 * time.Millisecond, Limit: 5}); err != nil {
@@ -37,6 +37,9 @@ func TestAppendOmitsRawQueryByDefault(t *testing.T) {
 	}
 	if strings.Contains(string(raw), "routing-only candidate metadata") || strings.Contains(string(raw), `"description"`) {
 		t.Fatalf("candidate description leaked into receipt: %s", raw)
+	}
+	if strings.Contains(string(raw), "fixture:private-neighbor") || strings.Contains(string(raw), `"conflicts_with"`) {
+		t.Fatalf("candidate conflict metadata leaked into privacy-minimal receipt: %s", raw)
 	}
 	info, err := os.Stat(path)
 	if err != nil {

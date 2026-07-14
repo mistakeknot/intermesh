@@ -72,7 +72,7 @@ func Resolve(input route.Result, generation registry.Generation) (route.Result, 
 		candidate, exists := original[id]
 		if !exists {
 			item := byID[id]
-			candidate = route.Candidate{ID: id, Description: item.Description, SkillMD: item.SkillMD, SelectedBy: "requirement", Reasons: []string{}, RequiredBy: []string{}}
+			candidate = route.Candidate{ID: id, Description: item.Description, SkillMD: item.SkillMD, SelectedBy: "requirement", Reasons: []string{}, RequiredBy: []string{}, ConflictsWith: append([]string(nil), item.Manifest.ConflictsWith...)}
 		} else {
 			item := byID[id]
 			if candidate.Description == "" {
@@ -81,7 +81,9 @@ func Resolve(input route.Result, generation registry.Generation) (route.Result, 
 			if candidate.SkillMD == "" {
 				candidate.SkillMD = item.SkillMD
 			}
+			candidate.ConflictsWith = append([]string(nil), item.Manifest.ConflictsWith...)
 		}
+		sort.Strings(candidate.ConflictsWith)
 		parents := requiredBy[id]
 		for parent := range parents {
 			candidate.RequiredBy = append(candidate.RequiredBy, parent)

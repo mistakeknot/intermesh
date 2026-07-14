@@ -8,9 +8,9 @@ description: Route requests through the external Intermesh registry and load onl
 For each substantive user request:
 
 1. Run `intermesh route --query "$USER_REQUEST" --host hermes --cwd "$PWD" --limit 3 --json`, adding known `--extension` and `--environment` gates.
-2. Surface all warnings from the resolver.
+2. Retain resolver `warnings` through applicability selection. Surface non-conflict warnings immediately; conflict warnings are potential conflicts until selection is complete.
 3. Treat ranked candidates as retrieval results, not automatically selected skills. Use each candidate's `id`, `description`, and `reasons` to judge whether its documented trigger applies. Trigger boundaries and explicit exclusions outweigh loose keyword overlap; mentioning a file or tool as an object does not select its workflow. Preserve recall when applicability is genuinely ambiguous.
-4. Read the complete `skill_md` only for candidates whose descriptions apply, plus their `selected_by: "requirement"` dependencies, in array order. If none apply, continue without a skill and report the routing abstention.
+4. Starting from applicable ranked candidates, compute the `required_by` dependency closure: repeatedly include any candidate whose `required_by` contains an already selected candidate, even when that dependency also has `selected_by: "rank"`. Then evaluate each selected candidate's `conflicts_with` intersection with the selected set and surface only conflicts whose two endpoints are selected. Read the complete `skill_md` for that final set in returned array order. If none apply, continue without a skill and report the routing abstention.
 5. Apply only selected instructions through Hermes's normal skill behavior; Intermesh supplies bounded discovery metadata and the agent owns applicability judgment.
 6. Preserve the default hashed receipt and attach an Interspect outcome when that integration is available.
 
