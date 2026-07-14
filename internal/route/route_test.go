@@ -61,6 +61,28 @@ func TestRankDoesNotTreatFileStemAsExactSkillName(t *testing.T) {
 	}
 }
 
+func TestRankDoesNotTreatNegatedActionsAsPositiveEvidence(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		routeFixture("interlab:autoresearch", "autoresearch", "Run a continuous optimization loop — edit code, benchmark, keep or discard, repeat. Use when systematically optimizing a metric through iterative code changes.", skill.Manifest{}),
+		routeFixture("documents:documents", "documents", "Create, edit, redline, and comment on DOCX artifacts with a strict render-and-verify workflow, then iterate before delivering the final document.", skill.Manifest{}),
+		routeFixture("intertest:verification-before-completion", "verification-before-completion", "Use before completion to identify and run verification commands.", skill.Manifest{}),
+	}}
+
+	result := Rank(Request{
+		Query: "Route this request through Intermesh, then inspect AGENTS.md and identify the verification commands required before completion. Do not edit project files and do not run the verification commands.",
+		Limit: 3,
+	}, generation)
+
+	if len(result.Candidates) == 0 || result.Candidates[0].ID != "intertest:verification-before-completion" {
+		t.Fatalf("negated actions outranked verification: %#v", result.Candidates)
+	}
+	for _, candidate := range result.Candidates {
+		if candidate.Components["lexical:edit"] != 0 || candidate.Components["lexical:run"] != 0 {
+			t.Fatalf("negated terms contributed lexical evidence: %#v", candidate)
+		}
+	}
+}
+
 func TestRankUsesPhraseExtensionEnvironmentAndLexicalSignals(t *testing.T) {
 	generation := registry.Generation{Skills: []skill.Skill{
 		routeFixture("docs:pdf", "pdf", "Read and create PDF documents.", skill.Manifest{
@@ -111,6 +133,14 @@ func TestTokensDropConversationalFunctionWords(t *testing.T) {
 	want := []string{"before", "no", "weather", "forecast"}
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("tokens=%#v want %#v", got, want)
+	}
+}
+
+func TestQueryTokensDropDirectlyNegatedTerms(t *testing.T) {
+	got := queryTokens("Do not edit project files and do not run verification commands without deploying releases")
+	want := []string{"project", "files", "verification", "commands", "releases"}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("queryTokens=%#v want %#v", got, want)
 	}
 }
 

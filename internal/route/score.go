@@ -82,7 +82,7 @@ func (s scorer) score(request Request, item skill.Skill) (float64, []string, map
 	for _, term := range tokens(searchableText(item)) {
 		documentTerms[term] = struct{}{}
 	}
-	for _, term := range tokens(query) {
+	for _, term := range queryTokens(query) {
 		if _, exists := documentTerms[term]; !exists {
 			continue
 		}
