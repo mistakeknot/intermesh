@@ -86,7 +86,7 @@ func TestRankReturnsEmptyForNoLexicalMatch(t *testing.T) {
 }
 
 func TestTokensDropConversationalFunctionWords(t *testing.T) {
-	got := tokens("what should you give me after this than before no do did does your good plus weather forecast")
+	got := tokens("what should you give me after this than before no do did does your good plus about how make are have weather forecast")
 	want := []string{"before", "no", "weather", "forecast"}
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("tokens=%#v want %#v", got, want)
