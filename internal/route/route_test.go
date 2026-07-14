@@ -1,6 +1,7 @@
 package route
 
 import (
+	"math"
 	"testing"
 
 	"github.com/mistakeknot/intermesh/internal/registry"
@@ -26,6 +27,16 @@ func TestRankExactIDWins(t *testing.T) {
 		t.Fatalf("exact ID did not win: %#v", result.Candidates)
 	}
 	assertReason(t, result.Candidates[0], "exact_id")
+	if result.Candidates[0].Components["exact_id"] != 100 {
+		t.Fatalf("exact score component missing: %#v", result.Candidates[0].Components)
+	}
+	var componentTotal float64
+	for _, value := range result.Candidates[0].Components {
+		componentTotal += value
+	}
+	if math.Abs(componentTotal-result.Candidates[0].Score) > 1e-9 {
+		t.Fatalf("components do not sum to score: components=%#v score=%f", result.Candidates[0].Components, result.Candidates[0].Score)
+	}
 }
 
 func TestRankUsesPhraseExtensionEnvironmentAndLexicalSignals(t *testing.T) {

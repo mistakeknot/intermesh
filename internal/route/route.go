@@ -48,12 +48,12 @@ func Rank(request Request, generation registry.Generation) Result {
 		Candidates:          []Candidate{}, Warnings: []string{},
 	}
 	for _, item := range generation.Skills {
-		score, reasons := scoring.score(request, item)
+		score, reasons, components := scoring.score(request, item)
 		if score <= 0 {
 			continue
 		}
 		result.Candidates = append(result.Candidates, Candidate{
-			ID: item.ID, SkillMD: item.SkillMD, Score: score, Reasons: reasons,
+			ID: item.ID, SkillMD: item.SkillMD, Score: score, Reasons: reasons, Components: components,
 			SelectedBy: "rank", RequiredBy: []string{},
 		})
 	}

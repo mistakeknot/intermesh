@@ -13,6 +13,7 @@ go test ./...
 go test -race ./...
 go build -o /tmp/intermesh ./cmd/intermesh
 /tmp/intermesh --help
+bash scripts/experiment.sh --check-gates
 ```
 
 ## Design Decisions (Do Not Re-Ask)
@@ -23,4 +24,5 @@ go build -o /tmp/intermesh ./cmd/intermesh
 - Intermesh emits receipts; Interspect learns from outcomes.
 - Intercore remains outside the write path.
 - Host profile changes must support dry-run, snapshot, and restore.
-
+- Host adapters request three candidates by default; the live-catalog experiment found this retained ≥95% deterministic recall while reducing the selected-body context tail relative to five.
+- Automatic catalog activation remains on hold until Interspect supplies at least 30 trustworthy observed route outcomes and abstention improves.

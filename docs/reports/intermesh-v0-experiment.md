@@ -35,9 +35,9 @@ The baseline audit counted 180 catalog entries and 32,071 description bytes. Int
 | Adversarial no-match precision | 100% | Informational; only one no-match prediction |
 | Adversarial no-match recall | 25% | Weakness; three of four non-skill requests over-routed |
 | Observed top-5 recall | Insufficient (0 trustworthy rows) | Requires ≥30 rows |
-| Warm route p50 / p95 | 2.1 ms / 3.8 ms | p95 <50 ms — pass |
-| Cold process p50 / p95 | 19.8 ms / 54.2 ms | Informational |
-| Full index time | 1.03 s | Informational |
+| Warm route p50 / p95 | 2.1 ms / 3.2 ms | p95 <50 ms — pass |
+| Cold process p50 / p95 | 19.8 ms / 126.8 ms | Informational; process startup has a noisy tail |
+| Full index time | 0.96 s | Informational |
 | Registry size | 258,048 bytes | Informational |
 | Real-catalog destructive operations | 0 | Must be 0 — pass |
 

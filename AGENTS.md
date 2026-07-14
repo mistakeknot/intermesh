@@ -14,7 +14,7 @@ Review [`PHILOSOPHY.md`](./PHILOSOPHY.md) during intake, planning, execution kic
 
 | Item | Value |
 |---|---|
-| Repository | `github.com/mistakeknot/intermesh` (remote not created yet) |
+| Repository | `github.com/mistakeknot/intermesh` |
 | CLI | `intermesh` |
 | Runtime | Go |
 | Persistence | SQLite, derived and rebuildable |
@@ -34,7 +34,9 @@ Review [`PHILOSOPHY.md`](./PHILOSOPHY.md) during intake, planning, execution kic
 ```bash
 go test ./...
 go test -race ./...
+go vet ./...
 go build ./cmd/intermesh
+bash scripts/experiment.sh --check-gates
 ```
 
 ## Current Constraints
@@ -42,4 +44,4 @@ go build ./cmd/intermesh
 - The project name was previously reserved in Sylveste for a possible coordination substrate. The current explicit project decision consumes it for skill routing; update the old reservation when landing.
 - A host cannot save context merely by receiving routing hints. Unselected skills must remain outside that host's automatic metadata catalog or be disabled through a reversible profile.
 - Indexing untrusted skills must never execute their scripts or import their code.
-
+- The experiment currently holds automatic catalog activation: observed recall has no trustworthy corpus yet, and no-match recall is 25%.

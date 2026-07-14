@@ -28,46 +28,54 @@ func newScorer(skills []skill.Skill) scorer {
 	return scorer{documentFrequency: documentFrequency, documentCount: len(skills)}
 }
 
-func (s scorer) score(request Request, item skill.Skill) (float64, []string) {
+func (s scorer) score(request Request, item skill.Skill) (float64, []string, map[string]float64) {
 	query := normalizeText(request.Query)
 	if query == "" {
-		return 0, nil
+		return 0, nil, nil
 	}
 	if len(item.Manifest.Environments) > 0 && request.Environment != "" && !containsFold(item.Manifest.Environments, request.Environment) {
-		return 0, nil
+		return 0, nil, nil
 	}
 
 	var score float64
 	var reasons []string
+	components := make(map[string]float64)
+	add := func(key string, value float64) {
+		score += value
+		components[key] += value
+	}
 	lowerID := strings.ToLower(item.ID)
 	lowerName := strings.ToLower(item.Name)
 	if containsIdentifier(query, lowerID) {
-		score += 100
+		add("exact_id", 100)
 		reasons = append(reasons, "exact_id")
 	} else if containsToken(tokens(query), lowerName) {
-		score += 100
+		add("exact_name", 100)
 		reasons = append(reasons, "exact_name")
 	}
 	if strings.Contains(query, "/"+lowerID) {
-		score += 80
+		add("namespaced_command", 80)
 		reasons = append(reasons, "namespaced_command")
 	}
 	for _, phrase := range item.Manifest.Phrases {
 		normalizedPhrase := normalizeText(phrase)
 		if normalizedPhrase != "" && strings.Contains(query, normalizedPhrase) {
-			score += 40
-			reasons = append(reasons, "phrase:"+normalizedPhrase)
+			key := "phrase:" + normalizedPhrase
+			add(key, 40)
+			reasons = append(reasons, key)
 		}
 	}
 	for _, extension := range request.Extensions {
 		if containsFold(item.Manifest.Extensions, extension) {
-			score += 20
-			reasons = append(reasons, "extension:"+strings.ToLower(extension))
+			key := "extension:" + strings.ToLower(extension)
+			add(key, 20)
+			reasons = append(reasons, key)
 		}
 	}
 	if request.Environment != "" && containsFold(item.Manifest.Environments, request.Environment) {
-		score += 10
-		reasons = append(reasons, "environment:"+strings.ToLower(request.Environment))
+		key := "environment:" + strings.ToLower(request.Environment)
+		add(key, 10)
+		reasons = append(reasons, key)
 	}
 
 	documentTerms := make(map[string]struct{})
@@ -79,11 +87,12 @@ func (s scorer) score(request Request, item skill.Skill) (float64, []string) {
 			continue
 		}
 		idf := math.Log(float64(s.documentCount+1)/float64(s.documentFrequency[term]+1)) + 1
-		score += idf
-		reasons = append(reasons, fmt.Sprintf("lexical:%s", term))
+		key := fmt.Sprintf("lexical:%s", term)
+		add(key, idf)
+		reasons = append(reasons, key)
 	}
 	sort.Strings(reasons)
-	return score, reasons
+	return score, reasons, components
 }
 
 func searchableText(item skill.Skill) string {

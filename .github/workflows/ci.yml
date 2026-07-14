@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Test
+        run: go test ./...
+      - name: Race test
+        run: go test -race ./...
+      - name: Vet
+        run: go vet ./...
+      - name: Build
+        run: go build ./cmd/intermesh ./cmd/intermesh-eval
+      - name: Validate plugin manifest and adapters
+        run: |
+          python3 -c 'import json; json.load(open(".claude-plugin/plugin.json"))'
+          test "$(find adapters -name SKILL.md | wc -l)" -eq 3
