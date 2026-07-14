@@ -117,6 +117,24 @@ codex mcp list
 Restart Codex after registration. For an on-demand session, the same server can
 be driven with `~/.local/bin/mcp` without preloading its schemas.
 
+## Second campaign result
+
+Canary session c03 exposed a filename collision: `AGENTS.md` gave the generic
+`intermux:agents` skill a 100-point exact-name bonus, pushing the expected
+verification skill to rank four. The `intermesh-routing-v2` campaign retained
+identifier-boundary exact-name matching:
+
+| Metric | Before | Retained |
+|---|---:|---:|
+| c03-derived top-3 recall | 0.00 | 1.00 |
+| Development no-match recall | 0.7333 | 0.7333 |
+| Development top-3/top-5 | 0.9667 / 1.00 | 0.9667 / 1.00 |
+| Locked holdout top-3/top-5 | 0.60 / 0.70 | 0.60 / 0.70 |
+
+The public regression is observed-derived, not an additional trustworthy
+canary label. Campaign evidence is archived under
+`campaigns/intermesh-routing-v2/`.
+
 ## Campaign contract
 
 Initialize an `intermesh-abstention` campaign with:
