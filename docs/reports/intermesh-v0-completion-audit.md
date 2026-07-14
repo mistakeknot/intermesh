@@ -2,11 +2,11 @@
 artifact_type: completion-audit
 bead: sylveste-qn2c
 date: 2026-07-14
-status: ready-to-land
+status: landed-awaiting-tracker-close
 ---
 # Intermesh V0 Completion Audit
 
-This audit maps the persistent goal and implementation-plan must-haves to direct evidence. Publication, pushes, and bead closure remain landing operations rather than implementation gaps.
+This audit maps the persistent goal and implementation-plan must-haves to direct evidence. The implementation and all cross-repository integrations are public and pushed. Only the policy-gated tracker close remains; it must execute on the canonical zklw signer, which was unreachable during the 2026-07-14 landing session.
 
 ## Goal requirements
 
@@ -23,7 +23,7 @@ This audit maps the persistent goal and implementation-plan must-haves to direct
 | Codex, Claude Code, Hermes adapters | Three router skills, plugin manifest, adapter descriptions under 300 characters, host-specific READMEs | Met |
 | Routing-quality/context experiment | Reproducible `scripts/experiment.sh`, 40-case corpus, evaluation package/CLI, experiment report | Met |
 | Production-worthy tests and documentation | Unit/race suites, cross-repo tests, CI workflow, mission/philosophy/conventions/contracts/reports | Met |
-| Land the smallest safe implementation | Six logical Intermesh commits plus dependency and Sylveste commits; automatic profile activation intentionally excluded | Ready; remote/push pending |
+| Land the smallest safe implementation | Seven logical Intermesh commits through `f1c0ad5`, plus pushed dependency and Sylveste commits; automatic profile activation intentionally excluded | Met |
 
 ## Plan truths
 
@@ -51,10 +51,12 @@ This audit maps the persistent goal and implementation-plan must-haves to direct
 
 ## Cross-repository evidence
 
-- Interskill `ff963e6`: optional manifest authoring/validation, tests pass.
+- Intermesh `f1c0ad5`: pushed to public [`mistakeknot/intermesh`](https://github.com/mistakeknot/intermesh) on `main`.
+- GitHub Actions run [`29351148260`](https://github.com/mistakeknot/intermesh/actions/runs/29351148260): test, race test, vet, build, and plugin/adapter validation passed for `f1c0ad5`.
+- Interskill `ff963e6`: optional manifest authoring/validation, tests pass, pushed to `main`.
 - Interspect `ecaafab`: route-receipt ingestion and decision/outcome separation; all shell tests pass.
-- Interspect `8e01879`: macOS test-count portability fix discovered by the full verification run.
-- Sylveste `86c0741f`: canonical name reservation and architecture inventory updated without staging unrelated user changes.
+- Interspect `8e01879`: macOS test-count portability fix discovered by the full verification run, pushed to `main`.
+- Sylveste `61f10a16`: canonical name reservation and architecture inventory update replayed onto the current remote and pushed without touching unrelated local edits.
 
 ## Deliberate holds, not missing scope
 
@@ -65,7 +67,4 @@ This audit maps the persistent goal and implementation-plan must-haves to direct
 
 ## Landing remainder
 
-1. Create the `mistakeknot/intermesh` GitHub repository with user-selected visibility.
-2. Push Intermesh, Interskill, Interspect, and Sylveste commits.
-3. Run post-push status/CI checks.
-4. Close `sylveste-qn2c` through the canonical gate and push Beads state.
+1. When zklw is reachable, close `sylveste-qn2c` through the canonical `bead-close.sh` signer gate and push Beads state. The bead notes contain the exact pushed SHAs and CI run. Mac intentionally cannot substitute: it is verifier-only and has no canonical signing key.
