@@ -81,6 +81,25 @@ func TestRankDoesNotTreatFileStemAsExactSkillName(t *testing.T) {
 	}
 }
 
+func TestRankAddsSignalForQueryTermsFoundInsideCompoundSkillName(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		routeFixture("clavain:code-review-discipline", "code-review-discipline", "Use when requesting or receiving code review.", skill.Manifest{}),
+		routeFixture("clavain:refactor-safely", "refactor-safely", "Use for significant refactoring with tests and a simplicity review.", skill.Manifest{}),
+	}}
+
+	result := Rank(Request{Query: "review the latest commit for regressions and missing tests", Limit: 2}, generation)
+
+	for _, candidate := range result.Candidates {
+		if candidate.ID == "clavain:code-review-discipline" {
+			if candidate.Components["name_token:review"] == 0 {
+				t.Fatalf("compound skill-name component missing: %#v", candidate)
+			}
+			return
+		}
+	}
+	t.Fatalf("compound-name candidate missing: %#v", result.Candidates)
+}
+
 func TestRankDoesNotTreatNegatedActionsAsPositiveEvidence(t *testing.T) {
 	generation := registry.Generation{Skills: []skill.Skill{
 		routeFixture("interlab:autoresearch", "autoresearch", "Run a continuous optimization loop — edit code, benchmark, keep or discard, repeat. Use when systematically optimizing a metric through iterative code changes.", skill.Manifest{}),
@@ -148,8 +167,21 @@ func TestRankReturnsEmptyForNoLexicalMatch(t *testing.T) {
 	}
 }
 
+func TestRankReturnsEmptyForArithmeticUsingFunctionWordBy(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		routeFixture("tools:image", "image", "Generate an image by editing a bitmap.", skill.Manifest{}),
+		routeFixture("tools:plugin", "plugin", "Create plugins by scaffolding directories.", skill.Manifest{}),
+	}}
+
+	result := Rank(Request{Query: "what is 17 multiplied by 19", Limit: 5}, generation)
+
+	if len(result.Candidates) != 0 {
+		t.Fatalf("function word produced arithmetic candidates: %#v", result.Candidates)
+	}
+}
+
 func TestTokensDropConversationalFunctionWords(t *testing.T) {
-	got := tokens("what should you give me after this than before no do did does your good plus about how make are have weather forecast")
+	got := tokens("what should you give me after this than before no do did does your good plus about how make are have by weather forecast")
 	want := []string{"before", "no", "weather", "forecast"}
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("tokens=%#v want %#v", got, want)

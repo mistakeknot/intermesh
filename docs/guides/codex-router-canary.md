@@ -162,6 +162,22 @@ while explicitly prohibiting verification, so the agent reasonably declined
 the verification workflow. Future canary cases must distinguish “identify a
 gate” from “perform the gated workflow” when assigning expected skills.
 
+## Observed regressions c07 and c08
+
+c07 asked for a read-only review of the latest Intermesh commit. The agent
+correctly rejected three irrelevant retrieved skills, completed the review,
+and found two graph-semantics defects, but the expected
+`clavain:code-review-discipline` skill was below the top-three boundary. The
+defects were repaired in `aa30999`; the routing miss seeded V4's compound-name
+experiment.
+
+c08 asked for `17 multiplied by 19`. All three candidates were false positives
+supported only by the function word `by`; the agent rejected them, loaded zero
+bodies, and answered 323. V4 made `by` a stopword, turning the same request into
+a true empty route. Sanitized cases derived from c07 and c08 live in the public
+observed-regression development set, but only their original canary records
+count toward the 30-session activation gate.
+
 ## Roll back
 
 The normal profile never changes, so the immediate rollback is simply to stop

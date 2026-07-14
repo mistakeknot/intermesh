@@ -10,12 +10,14 @@ import (
 )
 
 type scorer struct {
-	documentFrequency map[string]int
-	documentCount     int
+	documentFrequency     map[string]int
+	nameDocumentFrequency map[string]int
+	documentCount         int
 }
 
 func newScorer(skills []skill.Skill) scorer {
 	documentFrequency := make(map[string]int)
+	nameDocumentFrequency := make(map[string]int)
 	for _, item := range skills {
 		terms := make(map[string]struct{})
 		for _, term := range tokens(searchableText(item)) {
@@ -24,8 +26,11 @@ func newScorer(skills []skill.Skill) scorer {
 		for term := range terms {
 			documentFrequency[term]++
 		}
+		for _, term := range identifierTokens(item.Name) {
+			nameDocumentFrequency[term]++
+		}
 	}
-	return scorer{documentFrequency: documentFrequency, documentCount: len(skills)}
+	return scorer{documentFrequency: documentFrequency, nameDocumentFrequency: nameDocumentFrequency, documentCount: len(skills)}
 }
 
 func (s scorer) score(request Request, item skill.Skill) (float64, []string, map[string]float64) {
@@ -82,14 +87,23 @@ func (s scorer) score(request Request, item skill.Skill) (float64, []string, map
 	for _, term := range tokens(searchableText(item)) {
 		documentTerms[term] = struct{}{}
 	}
+	nameTerms := make(map[string]struct{})
+	for _, term := range identifierTokens(item.Name) {
+		nameTerms[term] = struct{}{}
+	}
 	for _, term := range queryTokens(query) {
-		if _, exists := documentTerms[term]; !exists {
-			continue
+		if _, exists := documentTerms[term]; exists {
+			idf := math.Log(float64(s.documentCount+1)/float64(s.documentFrequency[term]+1)) + 1
+			key := fmt.Sprintf("lexical:%s", term)
+			add(key, idf)
+			reasons = append(reasons, key)
 		}
-		idf := math.Log(float64(s.documentCount+1)/float64(s.documentFrequency[term]+1)) + 1
-		key := fmt.Sprintf("lexical:%s", term)
-		add(key, idf)
-		reasons = append(reasons, key)
+		if _, exists := nameTerms[term]; exists {
+			idf := math.Log(float64(s.documentCount+1)/float64(s.nameDocumentFrequency[term]+1)) + 1
+			key := fmt.Sprintf("name_token:%s", term)
+			add(key, 0.9*idf)
+			reasons = append(reasons, key)
+		}
 	}
 	sort.Strings(reasons)
 	return score, reasons, components

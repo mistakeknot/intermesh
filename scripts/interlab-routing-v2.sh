@@ -24,4 +24,12 @@ awk '
         sub(/^mrr=/, "", $2)
         print "METRIC observed_mrr=" $2
     }
+    $1 == "METRIC" && $2 ~ /^no_match_precision=/ {
+        sub(/^no_match_precision=/, "", $2)
+        print "METRIC observed_no_match_precision=" $2
+    }
+    $1 == "METRIC" && $2 ~ /^no_match_recall=/ {
+        sub(/^no_match_recall=/, "", $2)
+        print "METRIC observed_no_match_recall=" $2
+    }
 ' "$WORK/observed.metrics"
