@@ -13,6 +13,8 @@ go test ./...
 go test -race ./...
 go build -o /tmp/intermesh ./cmd/intermesh
 /tmp/intermesh --help
+bash tests/shell/test_setup_scripts.sh
+bash tests/shell/test_codex_canary.sh
 bash scripts/experiment.sh --check-gates
 ```
 

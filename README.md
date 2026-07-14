@@ -10,7 +10,7 @@ The agent host remains responsible for loading and following selected instructio
 
 ## Status
 
-V0 validated, with catalog activation intentionally opt-in. The live-catalog experiment measured 100% deterministic top-5 recall, 96.7% top-3 recall, and 99.48% modeled always-on metadata reduction. A subsequent guarded Interlab campaign raised no-match recall from 25% to 100% on the original four-case set, from 20% to 73.3% on a 30-case development set, and from 5% to 40% on a locked holdout without reducing positive recall. Observed route outcomes are still insufficient and indirect-paraphrase recall remains weak, so Intermesh does not automatically replace a host catalog. See the [V0 experiment](docs/reports/intermesh-v0-experiment.md) and [campaign learnings](campaigns/intermesh-abstention-v1/learnings.md).
+V0 validated, with catalog activation intentionally opt-in. The live-catalog experiment measured 100% deterministic top-5 recall, 96.7% top-3 recall, and 99.48% modeled always-on metadata reduction. A subsequent guarded Interlab campaign raised no-match recall from 25% to 100% on the original four-case set, from 20% to 73.3% on a 30-case development set, and from 5% to 40% on a locked holdout without reducing positive recall. A real Codex prompt-renderer smoke test of the isolated canary measured 98.65% less removable skill metadata, but observed route outcomes are still insufficient and indirect-paraphrase recall remains weak, so Intermesh does not automatically replace a host catalog. See the [V0 experiment](docs/reports/intermesh-v0-experiment.md), [campaign learnings](campaigns/intermesh-abstention-v1/learnings.md), and [Codex canary guide](docs/guides/codex-router-canary.md).
 
 ## Build
 
@@ -33,6 +33,22 @@ intermesh doctor
 The catalog helper discovers direct Codex plugins, versioned plugin-cache
 skills, local dotfile skills, and Codex system skills. It only reads canonical
 files and transactionally rebuilds the derived registry.
+
+Set up a reversible Codex router-only canary without changing the normal
+profile:
+
+```bash
+scripts/codex-canary.sh setup
+scripts/codex-canary.sh compare --workspace "$PWD"
+scripts/codex-canary.sh doctor --workspace "$PWD"
+scripts/codex-canary.sh login
+scripts/codex-canary.sh run --workspace "$PWD"
+```
+
+The canary isolates both `HOME` and `CODEX_HOME`, keeps authentication in its
+own file-backed store, restores the real home for task subprocesses, and pins
+router calls to its derived registry. See [Codex router-only canary](docs/guides/codex-router-canary.md)
+before collecting or labeling sessions.
 
 The registry is derived local state. Index one or more canonical roots with an explicit namespace:
 
@@ -61,7 +77,7 @@ Interskill optionally validates relationship manifests when this CLI is availabl
 
 ## Host adapters
 
-- `adapters/codex/` — context-saving only after an explicit managed-catalog activation.
+- `adapters/codex/` — context-saving in the isolated router-only canary; the normal profile remains untouched.
 - `adapters/claude-code/` — context-saving only in a router-only plugin/profile.
 - `adapters/hermes/` — context-saving through a dedicated native router-only profile.
 
@@ -73,6 +89,10 @@ Run the fixed V0 experiment with `scripts/experiment.sh --check-gates`. For a
 larger abstention-development corpus and Interlab-compatible `METRIC` output,
 run `scripts/interlab-abstention.sh`. The benchmark fails closed if positive
 top-3/top-5 recall, no-match precision, or warm latency cross their guardrails.
+
+Run `bash tests/shell/test_codex_canary.sh` to verify isolated setup,
+prompt-input analysis, session capture, the 30-label activation gate, and
+lossless rollback behavior.
 
 See [Testing and hill climbing](docs/guides/testing-and-hill-climbing.md) for
 Interlab registration, campaign scope, baseline results, and holdout policy.

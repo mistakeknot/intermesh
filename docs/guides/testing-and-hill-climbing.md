@@ -44,6 +44,7 @@ go test -race ./...
 go vet ./...
 go build ./cmd/intermesh ./cmd/intermesh-eval
 bash tests/shell/test_setup_scripts.sh
+bash tests/shell/test_codex_canary.sh
 bash scripts/experiment.sh --check-gates
 bash scripts/interlab-abstention.sh
 ```
@@ -140,3 +141,8 @@ Default routes append privacy-minimal `intermesh.route.v1` records to
 ingest these as decision evidence, but a route is not a success signal. The
 activation hold remains until host/session outcome evidence is joined to route
 IDs and at least 30 trustworthy labels can be evaluated.
+
+Use the [Codex router-only canary](codex-router-canary.md) to collect those
+labels without changing the normal profile. Twenty labeled sessions produce an
+interim report; the activation gate remains closed until all 30 sessions are
+labeled and every context, routing, coverage, and task-outcome threshold passes.

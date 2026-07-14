@@ -25,6 +25,10 @@ jobs:
         run: go vet ./...
       - name: Build
         run: go build ./cmd/intermesh ./cmd/intermesh-eval
+      - name: Shell integration tests
+        run: |
+          bash tests/shell/test_setup_scripts.sh
+          bash tests/shell/test_codex_canary.sh
       - name: Validate plugin manifest and adapters
         run: |
           python3 -c 'import json; json.load(open(".claude-plugin/plugin.json"))'
