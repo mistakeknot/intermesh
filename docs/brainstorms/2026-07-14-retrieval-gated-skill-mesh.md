@@ -2,7 +2,7 @@
 artifact_type: brainstorm
 bead: sylveste-qn2c
 date: 2026-07-14
-status: selected
+status: validated
 ---
 # Retrieval-gated skill mesh
 
@@ -15,6 +15,10 @@ The current explicit project decision assigns `Intermesh` to this skill-routing 
 **Alignment:** This turns a large prompt-time capability list into a small, explicit Unix-style retrieval boundary with measurable receipts.
 
 **Conflict/Risk:** The chosen name conflicts with an older reservation, and host catalog isolation varies substantially across Codex, Claude Code, and Hermes. Both must be resolved explicitly rather than hidden behind a generic adapter claim.
+
+## Experiment outcome
+
+V0 passed its deterministic recall, metadata-reduction, warm-latency, and non-mutation gates. The operational adapters request three candidates because top-3 deterministic recall remained 96.7% while loading five full skill bodies produced an unacceptable 79 KB p95 context tail. Observed recall remains insufficient (zero trustworthy query→skill labels), and no-match recall is only 25%, so real catalog activation is opt-in rather than automatic. See `docs/reports/intermesh-v0-experiment.md`.
 
 ## Outcome
 
@@ -77,4 +81,3 @@ Semantic reranking may be added through Intersearch after the lexical baseline i
 - If a host cannot isolate unselected skill metadata without unsupported configuration mutation, document that adapter as routing-only rather than claiming context savings.
 - If observed top-5 recall is below 85%, do not activate the reduced catalog by default; improve retrieval or retain a larger always-on tier.
 - If catalog activation cannot be made reversible and crash-safe, ship search/diagnostics only.
-

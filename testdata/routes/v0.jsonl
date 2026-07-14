@@ -1,0 +1,40 @@
+{"id":"debug-failure","kind":"deterministic","query":"debug this unexpected test failure","expected":["intertest:systematic-debugging"]}
+{"id":"tdd-command","kind":"deterministic","query":"use intertest:test-driven-development for this feature","expected":["intertest:test-driven-development"]}
+{"id":"verify-complete","kind":"deterministic","query":"verify this change before claiming complete","expected":["intertest:verification-before-completion"]}
+{"id":"write-plan","kind":"deterministic","query":"write an implementation plan from requirements","expected":["clavain:writing-plans"]}
+{"id":"ship-work","kind":"deterministic","query":"we are done commit push close beads","expected":["clavain:ship"]}
+{"id":"refactor-command","kind":"deterministic","query":"use clavain:refactor-safely on this duplicated code","expected":["clavain:refactor-safely"]}
+{"id":"chrome-session","kind":"deterministic","query":"control my logged-in Chrome tab","expected":["chrome:control-chrome"]}
+{"id":"pdf-layout","kind":"deterministic","query":"create a PDF and verify visual layout","expected":["pdf:pdf"]}
+{"id":"xlsx","kind":"deterministic","query":"create an xlsx spreadsheet","expected":["spreadsheets:spreadsheets"]}
+{"id":"powerpoint","kind":"deterministic","query":"create a PowerPoint presentation","expected":["presentations:presentations"]}
+{"id":"outlook-triage","kind":"deterministic","query":"triage my Outlook inbox","expected":["outlook-email:outlook-email-inbox-triage"]}
+{"id":"slack-reply","kind":"deterministic","query":"draft a reply to this Slack message","expected":["slack:slack-reply-drafting"]}
+{"id":"group-schedule","kind":"deterministic","query":"schedule a meeting for several people in Outlook","expected":["outlook-calendar:outlook-calendar-group-scheduler"]}
+{"id":"teams-summary","kind":"deterministic","query":"summarize a Teams channel","expected":["teams:teams-channel-summarization"]}
+{"id":"sharepoint-site","kind":"deterministic","query":"find the right SharePoint site","expected":["sharepoint:sharepoint-site-discovery"]}
+{"id":"raster-image","kind":"deterministic","query":"generate a raster image","expected":["codex-system:imagegen"]}
+{"id":"distinctive-ui","kind":"deterministic","query":"create a distinctive production-grade interface","expected":["interform:distinctive-design"]}
+{"id":"tui-layout","kind":"deterministic","query":"test terminal TUI layout","expected":["tuivision:tui-test"]}
+{"id":"session-search","kind":"deterministic","query":"search past agent sessions","expected":["intersearch:session-search"]}
+{"id":"agent-skill","kind":"deterministic","query":"create a new Agent Skill","expected":["interskill:skill","codex-system:skill-creator"]}
+{"id":"deep-research-command","kind":"deterministic","query":"run interdeep:deep-research on this topic","expected":["interdeep:deep-research"]}
+{"id":"tool-usage","kind":"deterministic","query":"analyze tool usage patterns and suggest workflow improvements","expected":["tool-time:tool-time","tool-time:tool-time-codex"]}
+{"id":"doc-drift","kind":"deterministic","query":"detect documentation drift and refresh stale docs","expected":["interwatch:doc-watch"]}
+{"id":"file-todos","kind":"deterministic","query":"manage file based todos in the todos directory","expected":["clavain:file-todos"]}
+{"id":"synthetic-uxr","kind":"deterministic","query":"create a synthetic anonymized UXR interview transcript","expected":["local:argus"]}
+{"id":"redline-docx","kind":"deterministic","query":"read and redline a docx Word document","expected":["documents:documents"]}
+{"id":"build-site","kind":"deterministic","query":"build a website landing page","expected":["sites:sites-building"]}
+{"id":"host-site","kind":"deterministic","query":"host publish and deploy this website","expected":["sites:sites-hosting"]}
+{"id":"free-calendar","kind":"deterministic","query":"clear part of my Outlook schedule to make free time","expected":["outlook-calendar:outlook-calendar-free-up-time"]}
+{"id":"email-actions","kind":"deterministic","query":"extract action items and deadlines from Outlook email","expected":["outlook-email:outlook-email-task-extraction"]}
+{"id":"pressure-neighbor","kind":"adversarial","query":"show context pressure, not code quality","expected":["interpulse:pressure"]}
+{"id":"quality-neighbor","kind":"adversarial","query":"show code quality, not context pressure","expected":["intercheck:quality"]}
+{"id":"chrome-neighbor","kind":"adversarial","query":"use my existing logged-in Chrome session, not the in-app browser","expected":["chrome:control-chrome"]}
+{"id":"browser-neighbor","kind":"adversarial","query":"open the in-app browser without using my Chrome session","expected":["browser:control-in-app-browser"]}
+{"id":"teams-reply-neighbor","kind":"adversarial","query":"draft a reply to a Teams message","expected":["teams:teams-reply-drafting"]}
+{"id":"slack-reply-neighbor","kind":"adversarial","query":"draft a reply to a Slack message","expected":["slack:slack-reply-drafting"]}
+{"id":"weather-no-skill","kind":"adversarial","query":"what is the weather in Chicago","no_match":true}
+{"id":"arithmetic-no-skill","kind":"adversarial","query":"calculate 2 plus 2","no_match":true}
+{"id":"nonsense-no-skill","kind":"adversarial","query":"quuxblorf snazzle","no_match":true}
+{"id":"joke-no-skill","kind":"adversarial","query":"tell me a joke about penguins","no_match":true}

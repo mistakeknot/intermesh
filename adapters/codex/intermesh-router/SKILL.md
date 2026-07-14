@@ -7,7 +7,7 @@ description: Route each request through the external Intermesh skill registry, t
 
 For each substantive user request:
 
-1. Run `intermesh route --query "$USER_REQUEST" --host codex --cwd "$PWD" --json`. Pass relevant `--extension` or `--environment` values when they are known.
+1. Run `intermesh route --query "$USER_REQUEST" --host codex --cwd "$PWD" --limit 3 --json`. Pass relevant `--extension` or `--environment` values when they are known.
 2. Inspect `warnings` and tell the user about any conflict, missing requirement, or degraded routing result.
 3. Read every returned `candidates[].skill_md` file completely, in array order. Required skills appear before the skill that required them.
 4. Follow those skill instructions through Codex's normal skill mechanism. Intermesh selects instructions; it does not replace them.

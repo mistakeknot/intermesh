@@ -7,7 +7,7 @@ description: Route requests through the external Intermesh registry and load onl
 
 For each substantive user request:
 
-1. Run `intermesh route --query "$USER_REQUEST" --host hermes --cwd "$PWD" --json`, adding known `--extension` and `--environment` gates.
+1. Run `intermesh route --query "$USER_REQUEST" --host hermes --cwd "$PWD" --limit 3 --json`, adding known `--extension` and `--environment` gates.
 2. Surface all warnings from the resolver.
 3. Read every returned `candidates[].skill_md` file fully and in order; dependencies are ordered before dependents.
 4. Apply those instructions through Hermes's normal skill behavior.

@@ -6,7 +6,7 @@ Version 1 is the initial local contract. Canonical information lives in skill pa
 
 ## Canonical skill package
 
-Every package contains `SKILL.md` with YAML frontmatter delimited by `---` lines. `name` and `description` are required after host-compatible defaults are applied. Intermesh reads the file as data and never executes scripts, imports code, or expands template expressions while indexing.
+Every package contains `SKILL.md` with YAML frontmatter delimited by `---` lines. `description` is required. When `name` is omitted, Intermesh applies the host-compatible default of the skill directory name; title-case display names are preserved while their registry ID segment is lowercased. Intermesh reads the file as data and never executes scripts, imports code, or expands template expressions while indexing.
 
 An optional `intermesh.yaml` beside `SKILL.md` declares relationships and deterministic routing hints:
 
@@ -95,4 +95,3 @@ Intermesh records predictions only. Interspect or another evidence system attach
 ## Compatibility
 
 Adding optional fields is compatible. Changing field meaning, required fields, ID rules, selection semantics, or receipt privacy defaults requires a new major contract version.
-

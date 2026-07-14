@@ -13,7 +13,7 @@ import (
 
 const maxDescriptionLength = 1024
 
-var validName = regexp.MustCompile(`^[a-z0-9][a-z0-9._-]*$`)
+var validName = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._-]*$`)
 
 type frontmatter struct {
 	Name        string `yaml:"name"`
@@ -55,6 +55,9 @@ func Parse(path, namespace string) (Skill, []Diagnostic) {
 	}
 	metadata.Name = strings.TrimSpace(metadata.Name)
 	metadata.Description = strings.TrimSpace(metadata.Description)
+	if metadata.Name == "" {
+		metadata.Name = filepath.Base(filepath.Dir(canonical))
+	}
 	body := strings.Join(lines[closing+1:], "\n")
 	hash := sha256.Sum256([]byte(body))
 
@@ -66,17 +69,16 @@ func Parse(path, namespace string) (Skill, []Diagnostic) {
 		Directory:   filepath.Dir(canonical),
 		BodyHash:    fmt.Sprintf("sha256:%x", hash),
 	}
+	identifierName := strings.ToLower(skill.Name)
 	if skill.Namespace == "" {
-		skill.ID = skill.Name
+		skill.ID = identifierName
 	} else {
-		skill.ID = skill.Namespace + ":" + skill.Name
+		skill.ID = skill.Namespace + ":" + identifierName
 	}
 
 	var diagnostics []Diagnostic
-	if skill.Name == "" {
-		diagnostics = append(diagnostics, diagnostic(canonical, "frontmatter.missing_name", "name is required"))
-	} else if !validName.MatchString(skill.Name) {
-		diagnostics = append(diagnostics, diagnostic(canonical, "frontmatter.invalid_name", "name must contain lowercase letters, digits, dot, underscore, or hyphen"))
+	if !validName.MatchString(skill.Name) {
+		diagnostics = append(diagnostics, diagnostic(canonical, "frontmatter.invalid_name", "name must contain letters, digits, dot, underscore, or hyphen"))
 	}
 	if skill.Description == "" {
 		diagnostics = append(diagnostics, diagnostic(canonical, "frontmatter.missing_description", "description is required"))

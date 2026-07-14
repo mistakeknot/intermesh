@@ -68,6 +68,39 @@ func TestParseReportsDescriptionOverHostLimit(t *testing.T) {
 	assertDiagnosticCode(t, diagnostics, "frontmatter.description_too_long")
 }
 
+func TestParseDefaultsMissingNameFromDirectory(t *testing.T) {
+	directory := filepath.Join(t.TempDir(), "directory-name")
+	if err := os.MkdirAll(directory, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(directory, "SKILL.md")
+	if err := os.WriteFile(path, []byte("---\ndescription: Use when the directory supplies the skill name.\n---\nBody\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	parsed, diagnostics := Parse(path, "fixture")
+
+	if len(diagnostics) != 0 {
+		t.Fatalf("unexpected diagnostics: %#v", diagnostics)
+	}
+	if parsed.Name != "directory-name" || parsed.ID != "fixture:directory-name" {
+		t.Fatalf("directory default not applied: %#v", parsed)
+	}
+}
+
+func TestParseNormalizesTitleCaseNameForIdentifier(t *testing.T) {
+	path := writeSkillFile(t, "---\nname: Presentations\ndescription: Use for presentation work.\n---\nBody\n")
+
+	parsed, diagnostics := Parse(path, "official")
+
+	if len(diagnostics) != 0 {
+		t.Fatalf("unexpected diagnostics: %#v", diagnostics)
+	}
+	if parsed.Name != "Presentations" || parsed.ID != "official:presentations" {
+		t.Fatalf("title-case identifier not normalized: %#v", parsed)
+	}
+}
+
 func assertDiagnosticCode(t *testing.T, diagnostics []Diagnostic, code string) {
 	t.Helper()
 	for _, diagnostic := range diagnostics {

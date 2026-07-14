@@ -8,7 +8,7 @@ allowed-tools: Bash, Read
 
 For each substantive request:
 
-1. Run `intermesh route --query "$USER_REQUEST" --host claude-code --cwd "$PWD" --json`.
+1. Run `intermesh route --query "$USER_REQUEST" --host claude-code --cwd "$PWD" --limit 3 --json`.
 2. Surface resolver warnings.
 3. Read every returned `candidates[].skill_md` completely, in array order.
 4. Follow each selected skill normally.

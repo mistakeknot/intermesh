@@ -8,7 +8,7 @@ allowed-tools: Bash, Read
 
 For each substantive user request:
 
-1. Run `intermesh route --query "$USER_REQUEST" --host claude-code --cwd "$PWD" --json`. Include relevant `--extension` or `--environment` values when known.
+1. Run `intermesh route --query "$USER_REQUEST" --host claude-code --cwd "$PWD" --limit 3 --json`. Include relevant `--extension` or `--environment` values when known.
 2. Surface every resolver warning.
 3. Use `Read` to load every returned `candidates[].skill_md` completely and in array order. Required skills precede their dependents.
 4. Follow the selected skills normally; Intermesh is discovery infrastructure, not an instruction executor.
