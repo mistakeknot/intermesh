@@ -1,0 +1,13 @@
+{
+  "name": "intermesh",
+  "version": "0.1.0",
+  "description": "Retrieval-gated Agent Skills discovery through a host-agnostic local CLI.",
+  "author": {
+    "name": "mistakeknot",
+    "email": "mistakeknot@vibeguider.org"
+  },
+  "license": "MIT",
+  "skills": [
+    "./skills/router"
+  ]
+}

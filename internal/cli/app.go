@@ -35,6 +35,8 @@ func Run(arguments []string, stdout, stderr io.Writer) int {
 		return runManifest(arguments, stdout, stderr)
 	case "doctor":
 		return runDoctor(arguments, stdout, stderr)
+	case "profile":
+		return runProfile(arguments, stdout, stderr)
 	default:
 		fmt.Fprintf(stderr, "unknown command %q\n", command)
 		writeHelp(stderr)
@@ -52,5 +54,8 @@ Usage:
   intermesh resolve [flags] id...
   intermesh graph [flags] id
   intermesh manifest validate path [--json]
+  intermesh profile plan --host host --catalog path --router path [--out file] [--json]
+  intermesh profile apply --plan file --snapshot-root path --yes [--json]
+  intermesh profile restore --snapshot file --yes [--json]
   intermesh doctor [--db path] [--json]`)
 }
