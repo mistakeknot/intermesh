@@ -14,6 +14,8 @@ for host in codex claude-code hermes; do
     router_skill="$ROOT/adapters/$host/intermesh-router/SKILL.md"
     grep -Fq 'Treat ranked candidates as retrieval results, not automatically selected skills.' "$router_skill" || \
         fail "$host router must distinguish retrieved candidates from selected skills"
+    grep -Fq 'Route only the substantive task' "$router_skill" || \
+        fail "$host router must remove routing boilerplate from the scoring query"
     grep -Fq 'Read the complete `skill_md` for that final set' "$router_skill" || \
         fail "$host router must progressively load applicable skill bodies"
     grep -Fq '`required_by` dependency closure' "$router_skill" || \
