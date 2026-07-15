@@ -10,20 +10,24 @@ fail() {
     exit 1
 }
 
-for host in codex claude-code hermes; do
-    router_skill="$ROOT/adapters/$host/intermesh-router/SKILL.md"
+for router_skill in \
+    "$ROOT/adapters/codex/intermesh-router/SKILL.md" \
+    "$ROOT/adapters/claude-code/intermesh-router/SKILL.md" \
+    "$ROOT/adapters/hermes/intermesh-router/SKILL.md" \
+    "$ROOT/skills/router/SKILL.md"; do
+    router_label=${router_skill#"$ROOT/"}
     grep -Fq 'Treat ranked candidates as retrieval results, not automatically selected skills.' "$router_skill" || \
-        fail "$host router must distinguish retrieved candidates from selected skills"
+        fail "$router_label must distinguish retrieved candidates from selected skills"
     grep -Fq 'Route only the substantive task' "$router_skill" || \
-        fail "$host router must remove routing boilerplate from the scoring query"
+        fail "$router_label must remove routing boilerplate from the scoring query"
     grep -Fq 'Read the complete `skill_md` for that final set' "$router_skill" || \
-        fail "$host router must progressively load applicable skill bodies"
+        fail "$router_label must progressively load applicable skill bodies"
     grep -Fq '`required_by` dependency closure' "$router_skill" || \
-        fail "$host router must preserve requirements for dual-role ranked candidates"
+        fail "$router_label must preserve requirements for dual-role ranked candidates"
     grep -Fq '`conflicts_with` intersection' "$router_skill" || \
-        fail "$host router must filter conflicts after applicability selection"
+        fail "$router_label must filter conflicts after applicability selection"
     if grep -Fq 'Read every returned `candidates[].skill_md` file completely' "$router_skill"; then
-        fail "$host router must not fully load every retrieved candidate"
+        fail "$router_label must not fully load every retrieved candidate"
     fi
 done
 
