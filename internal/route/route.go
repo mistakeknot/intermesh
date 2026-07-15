@@ -2,6 +2,7 @@ package route
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/mistakeknot/intermesh/internal/registry"
 )
@@ -51,7 +52,7 @@ func Rank(request Request, generation registry.Generation) Result {
 	}
 	for _, item := range generation.Skills {
 		score, reasons, components := scoring.score(request, item)
-		if score <= 0 {
+		if score <= 0 || !hasSufficientEvidence(components) {
 			continue
 		}
 		result.Candidates = append(result.Candidates, Candidate{
@@ -69,4 +70,17 @@ func Rank(request Request, generation registry.Generation) Result {
 		result.Candidates = result.Candidates[:limit]
 	}
 	return result
+}
+
+func hasSufficientEvidence(components map[string]float64) bool {
+	if len(components) >= 2 {
+		return true
+	}
+	for key := range components {
+		if key == "exact_id" || key == "exact_name" || key == "namespaced_command" ||
+			strings.HasPrefix(key, "phrase:") || strings.HasPrefix(key, "extension:") || strings.HasPrefix(key, "environment:") {
+			return true
+		}
+	}
+	return false
 }

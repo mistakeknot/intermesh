@@ -39,6 +39,13 @@ func tokens(value string) []string {
 		}
 		seen[part] = struct{}{}
 		result = append(result, part)
+		if len([]rune(part)) > 3 && strings.HasSuffix(part, "s") && !strings.HasSuffix(part, "ss") {
+			singular := strings.TrimSuffix(part, "s")
+			if _, exists := seen[singular]; !exists {
+				seen[singular] = struct{}{}
+				result = append(result, singular)
+			}
+		}
 	}
 	return result
 }
@@ -61,6 +68,13 @@ func identifierTokens(value string) []string {
 		}
 		seen[part] = struct{}{}
 		result = append(result, part)
+		if len([]rune(part)) > 3 && strings.HasSuffix(part, "s") && !strings.HasSuffix(part, "ss") {
+			singular := strings.TrimSuffix(part, "s")
+			if _, exists := seen[singular]; !exists {
+				seen[singular] = struct{}{}
+				result = append(result, singular)
+			}
+		}
 	}
 	return result
 }

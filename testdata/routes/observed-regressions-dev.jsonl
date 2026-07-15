@@ -1,3 +1,8 @@
 {"id":"c03-derived-agents-file-verification","kind":"observed-derived-match","query":"Route this request through Intermesh, then inspect the current Intermesh AGENTS.md and identify the verification commands required before completion. Do not edit project files and do not run the verification commands; the normal private Intermesh route receipt is allowed.","expected":["intertest:verification-before-completion"]}
 {"id":"c07-derived-latest-commit-review","kind":"observed-derived-match","query":"Route this request through Intermesh, then review the latest commit in the current Intermesh repository for correctness, regressions, and missing tests. Do not edit files or commit anything; read-only commands and the normal private route receipt are allowed.","expected":["clavain:code-review-discipline"]}
 {"id":"c08-derived-arithmetic-no-skill","kind":"observed-derived-no-match","query":"what is 17 multiplied by 19?","no_match":true}
+{"id":"c11-derived-parser-tdd","kind":"observed-derived-match","query":"Explain the test-driven development cycle you would use to add a parser feature here. Do not edit files or run implementation commands.","expected":["intertest:test-driven-development"]}
+{"id":"c12-derived-arithmetic-with-constraint","kind":"observed-derived-no-match","query":"what is 17 multiplied by 19? Do not edit files.","no_match":true}
+{"id":"c14-derived-haiku-no-skill","kind":"observed-derived-no-match","query":"write a three-line haiku about rain.","no_match":true}
+{"id":"c15-derived-temperature-no-skill","kind":"observed-derived-no-match","query":"is 20 degrees Celsius warmer than 60 degrees Fahrenheit?","no_match":true}
+{"id":"c16-derived-roman-no-skill","kind":"observed-derived-no-match","query":"Convert 49 to Roman numerals.","no_match":true}

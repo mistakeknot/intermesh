@@ -100,6 +100,37 @@ func TestRankAddsSignalForQueryTermsFoundInsideCompoundSkillName(t *testing.T) {
 	t.Fatalf("compound-name candidate missing: %#v", result.Candidates)
 }
 
+func TestRankMatchesSingularQueryToPluralCompoundNameToken(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		routeFixture("clavain:writing-plans", "writing-plans", "Use when requirements exist.", skill.Manifest{}),
+		routeFixture("templates:design", "design", "Document requirements for a system.", skill.Manifest{}),
+	}}
+
+	result := Rank(Request{Query: "write an implementation plan from requirements", Limit: 2}, generation)
+
+	if len(result.Candidates) == 0 || result.Candidates[0].ID != "clavain:writing-plans" {
+		t.Fatalf("singular name token did not preserve planning route: %#v", result.Candidates)
+	}
+	if result.Candidates[0].Components["name_token:plan"] == 0 {
+		t.Fatalf("singular name-token evidence missing: %#v", result.Candidates[0])
+	}
+}
+
+func TestRankMatchesSingularQueryToPluralDescriptionToken(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		routeFixture("media:imagegen", "imagegen", "Generate raster illustrations from scene descriptions.", skill.Manifest{}),
+	}}
+
+	result := Rank(Request{Query: "make a raster illustration", Limit: 1}, generation)
+
+	if len(result.Candidates) != 1 || result.Candidates[0].ID != "media:imagegen" {
+		t.Fatalf("singular description token did not preserve image route: %#v", result.Candidates)
+	}
+	if result.Candidates[0].Components["lexical:illustration"] == 0 {
+		t.Fatalf("singular description evidence missing: %#v", result.Candidates[0])
+	}
+}
+
 func TestRankDoesNotTreatNegatedActionsAsPositiveEvidence(t *testing.T) {
 	generation := registry.Generation{Skills: []skill.Skill{
 		routeFixture("interlab:autoresearch", "autoresearch", "Run a continuous optimization loop — edit code, benchmark, keep or discard, repeat. Use when systematically optimizing a metric through iterative code changes.", skill.Manifest{}),
@@ -177,6 +208,31 @@ func TestRankReturnsEmptyForArithmeticUsingFunctionWordBy(t *testing.T) {
 
 	if len(result.Candidates) != 0 {
 		t.Fatalf("function word produced arithmetic candidates: %#v", result.Candidates)
+	}
+}
+
+func TestRankDropsCandidatesSupportedByOnlyOneLooseLexicalTerm(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		routeFixture("docs:letter", "letter", "Write professional business letters.", skill.Manifest{}),
+		routeFixture("calendar:shared", "shared", "Write to a shared calendar.", skill.Manifest{}),
+	}}
+
+	result := Rank(Request{Query: "write a three-line haiku about rain", Limit: 5}, generation)
+
+	if len(result.Candidates) != 0 {
+		t.Fatalf("single loose lexical term produced candidates: %#v", result.Candidates)
+	}
+}
+
+func TestRankKeepsSingleDeclaredPhraseSignal(t *testing.T) {
+	generation := registry.Generation{Skills: []skill.Skill{
+		routeFixture("docs:haiku", "haiku", "Specialized poetry workflow.", skill.Manifest{Phrases: []string{"three-line haiku"}}),
+	}}
+
+	result := Rank(Request{Query: "write a three-line haiku about rain", Limit: 5}, generation)
+
+	if len(result.Candidates) != 1 || result.Candidates[0].ID != "docs:haiku" {
+		t.Fatalf("declared phrase evidence was dropped: %#v", result.Candidates)
 	}
 }
 
