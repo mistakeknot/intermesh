@@ -46,7 +46,9 @@ if [[ -d "$codex_root" ]]; then
         rel=${skill#"$codex_root/"}
         plugin=${rel%%/*}
         roots+=(--root "$plugin=$(dirname "$skill")")
-    done < <(find "$codex_root" -mindepth 4 -maxdepth 4 -type f -path '*/skills/*/SKILL.md' -print | LC_ALL=C sort)
+    done < <(find "$codex_root" -mindepth 3 -maxdepth 4 -type f \
+        \( -path '*/skills/SKILL.md' -o -path '*/skills/*/SKILL.md' \) \
+        -print | LC_ALL=C sort)
 fi
 
 cache_root="$codex_root/plugins/cache"

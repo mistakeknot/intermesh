@@ -39,10 +39,12 @@ assert_contains() {
 fixture_home="$TMP/home"
 mkdir -p \
     "$fixture_home/.codex/clavain/skills/debug" \
+    "$fixture_home/.codex/intermap/skills" \
     "$fixture_home/.codex/plugins/cache/openai-curated-remote/notion/0.1.7/skills/capture" \
     "$fixture_home/projects/dotfiles/common/.codex/skills/argus" \
     "$fixture_home/projects/dotfiles/common/.codex/skills/.system/imagegen"
 printf '%s\n' '---' 'name: debug' 'description: Debug.' '---' > "$fixture_home/.codex/clavain/skills/debug/SKILL.md"
+printf '%s\n' '---' 'name: intermap' 'description: Map projects.' '---' > "$fixture_home/.codex/intermap/skills/SKILL.md"
 printf '%s\n' '---' 'name: capture' 'description: Capture.' '---' > "$fixture_home/.codex/plugins/cache/openai-curated-remote/notion/0.1.7/skills/capture/SKILL.md"
 printf '%s\n' '---' 'name: argus' 'description: Generate fixtures.' '---' > "$fixture_home/projects/dotfiles/common/.codex/skills/argus/SKILL.md"
 printf '%s\n' '---' 'name: imagegen' 'description: Generate images.' '---' > "$fixture_home/projects/dotfiles/common/.codex/skills/.system/imagegen/SKILL.md"
@@ -63,6 +65,7 @@ CAPTURE="$capture" INTERMESH_BIN="$fake_intermesh" \
 assert_contains "$capture" index
 assert_contains "$capture" --root
 assert_contains "$capture" "clavain=$fixture_home/.codex/clavain/skills/debug"
+assert_contains "$capture" "intermap=$fixture_home/.codex/intermap/skills"
 assert_contains "$capture" "notion=$fixture_home/.codex/plugins/cache/openai-curated-remote/notion/0.1.7/skills/capture"
 assert_contains "$capture" "local=$fixture_home/projects/dotfiles/common/.codex/skills/argus"
 assert_contains "$capture" "codex-system=$fixture_home/projects/dotfiles/common/.codex/skills/.system/imagegen"
